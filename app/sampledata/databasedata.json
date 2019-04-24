@@ -1,0 +1,23 @@
+{
+	"users": {
+		"email_id": "1@1.1",
+		"imc": 20
+	},
+	
+	"ingredientes": [{
+			"id": 1,
+			"name": "avocado",
+			"kcal": 200
+			},
+			{
+			"id": 2,
+			"name": "pineapple",
+			"kcal": 20
+			}],
+	"recetas": {
+		"id": 1,
+		"name": "avocado con piña",
+		"ingredientes": [1, 2],
+		"tiempo": 60
+	}
+}
