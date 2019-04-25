@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".signin" />
-        <activity android:name=".signup_activity"></activity>
+        <activity android:name=".signup_activity" />
+        <activity android:name=".Cuestionario"/>
     </application>
 
 </manifest>
