@@ -17,4 +17,11 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/signout"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="90dp"
+        android:text="LogOut"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
