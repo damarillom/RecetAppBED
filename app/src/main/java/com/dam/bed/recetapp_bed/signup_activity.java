@@ -83,7 +83,7 @@ public class signup_activity extends AppCompatActivity {
                                     System.out.println("email:" + user.getEmail());
                                     System.out.println("display:" + user.getDisplayName());
 
-                                    FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).setValue(new User(email));
+                                    FirebaseDatabase.getInstance().getReference("users").child(user.getUid().toString()).setValue(new User(user.getEmail().toString()).getEmailId());
 
                                 } else {
                                     // If sign in fails, display a message to the user.
