@@ -17,11 +17,24 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class signup_activity extends AppCompatActivity {
     private EditText name, email_id, passwordcheck;
     private FirebaseAuth mAuth;
     private static final String TAG = "";
     private ProgressBar progressBar;
+
+
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("recetappbed");
+
+    private String email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +55,7 @@ public class signup_activity extends AppCompatActivity {
         ahsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = email_id.getText().toString();
+                email = email_id.getText().toString();
                 String password = passwordcheck.getText().toString();
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter Eamil Id", Toast.LENGTH_SHORT).show();
@@ -65,6 +78,13 @@ public class signup_activity extends AppCompatActivity {
                                     Intent intent = new Intent(signup_activity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
+
+                                    //INSERT IN OUR BBDD
+                                    DatabaseReference usersRef = ref.child("users");
+
+
+                                    FirebaseDatabase.getInstance().getReference("users").child(email.replace("@","-").replace(".","-")).setValue(new User(email));
+
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());

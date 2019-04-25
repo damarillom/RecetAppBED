@@ -7,8 +7,9 @@ public class User {
     public String emailId;
     public double imc;
 
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("server/saving-data/fireblog");
+    public User() {
+
+    }
 
     public User(String emailId) {
         this.emailId = emailId;
@@ -20,8 +21,5 @@ public class User {
         this.emailId = emailId;
         this.imc = imc;
     }
-
-
-    DatabaseReference usersRef = ref.child("users");
 
 }
