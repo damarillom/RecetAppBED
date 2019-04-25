@@ -101,8 +101,8 @@ public class signin extends AppCompatActivity {
                                     startActivity(intent);
                                     finish();
                                 } else {
-                                    Log.d(TAG, "singInWithEmail:Fail");
-                                    //Toast.makeText(signin.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, "signInWithEmail:Fail");
+                                    Toast.makeText(signin.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

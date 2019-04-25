@@ -18,5 +18,6 @@
     <string name="password">password</string>
     <string name="login">login</string>
     <string name="create_a_new_account">Create a new account</string>
+    <string name="failed">Failed</string>
 
 </resources>
