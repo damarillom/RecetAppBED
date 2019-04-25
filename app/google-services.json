@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "698666719118-ps4do4ojr4ojepqd96eh68oju4k9m94b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dam.bed.recetapp_bed",
+            "certificate_hash": "cab01fcdd2f890fdab47a2d92d0523ba5592b056"
+          }
+        },
+        {
+          "client_id": "698666719118-blaef771delrc2g90fsie5fbkhs90p3m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dam.bed.recetapp_bed",
+            "certificate_hash": "5c52bb58c2f9b8c61d760bc70e3cc3271d75a04b"
+          }
+        },
+        {
           "client_id": "698666719118-7aec86c4rhe9qb0pl73hn7r0feu1v75d.apps.googleusercontent.com",
           "client_type": 3
         }
