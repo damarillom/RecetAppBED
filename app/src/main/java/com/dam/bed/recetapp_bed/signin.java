@@ -25,6 +25,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class signin extends AppCompatActivity {
     private static final String TAG = "test";
     private EditText inputEmail, inputPassword;
@@ -34,6 +37,8 @@ public class signin extends AppCompatActivity {
     private final static int RC_SIGN_IN = 123;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListner;
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("recetappbed");
     @Override
     protected void onStart() {
         super.onStart();
@@ -131,6 +136,13 @@ public class signin extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+
+
+                DatabaseReference usersRef = ref.child("users");
+
+                String email = account.getEmail();
+                FirebaseDatabase.getInstance().getReference("users").child(email.replace("@","-").replace(".","-")).setValue(new User(email));
+
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
