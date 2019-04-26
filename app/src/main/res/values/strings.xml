@@ -19,5 +19,17 @@
     <string name="login">login</string>
     <string name="create_a_new_account">Create a new account</string>
     <string name="failed">Failed</string>
+    <string name="height">Height (cm)</string>
+    <string name="weight">Weight (kg)</string>
+    <string name="yearofbirth">Year of birth</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female" >Female</string>
+    <string name="other">Other</string>
+    <string name="accept">Accept</string>
+    <string name="typeofdiet">Type of diet</string>
+    <string name="omnivore">Omnivore</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="vegan">Vegan</string>
 
 </resources>
