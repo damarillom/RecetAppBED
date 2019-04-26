@@ -28,7 +28,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class signin extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private static final String TAG = "test";
     private EditText inputEmail, inputPassword;
     private FirebaseAuth mAuth;
@@ -50,10 +50,10 @@ public class signin extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         //check the current user
         if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(signin.this, MainActivity.class));
+            startActivity(new Intent(Login.this, MainActivity.class));
             finish();
         }
-        setContentView(R.layout.activity_signin);
+        setContentView(R.layout.activity_login);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         Button ahlogin = (Button) findViewById(R.id.ah_login);
@@ -70,7 +70,7 @@ public class signin extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(signin.this, signup_activity.class));
+                startActivity(new Intent(Login.this, Register.class));
             }
         });
         mAuth = FirebaseAuth.getInstance();
@@ -91,19 +91,19 @@ public class signin extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 //authenticate user
                 mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(signin.this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     // there was an error
                                     Log.d(TAG, "signInWithEmail:success");
-                                    Intent intent = new Intent(signin.this, MainActivity.class);
+                                    Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
                                     Log.d(TAG, "signInWithEmail:Fail");
-                                    Toast.makeText(signin.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Login.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -113,7 +113,7 @@ public class signin extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    startActivity(new Intent(signin.this, MainActivity.class));
+                    startActivity(new Intent(Login.this, MainActivity.class));
                 }
             }
         };
@@ -165,7 +165,7 @@ public class signin extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(signin.this, "Aut Fail", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Aut Fail", Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
                         // ...

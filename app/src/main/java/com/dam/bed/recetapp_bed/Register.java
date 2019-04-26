@@ -21,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class signup_activity extends AppCompatActivity {
+public class Register extends AppCompatActivity {
     private EditText name, email_id, passwordcheck;
     private FirebaseAuth mAuth;
     private static final String TAG = "";
@@ -36,12 +36,12 @@ public class signup_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_activity);
+        setContentView(R.layout.activity_register);
         TextView btnSignUp = (TextView) findViewById(R.id.login_page);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(signup_activity.this, signin.class);
+                Intent intent = new Intent(Register.this, Login.class);
                 startActivity(intent);
             }
         });
@@ -65,7 +65,7 @@ public class signup_activity extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(signup_activity.this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
@@ -73,7 +73,7 @@ public class signup_activity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                    Intent intent = new Intent(signup_activity.this, MainActivity.class);
+                                    Intent intent = new Intent(Register.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
 
@@ -86,14 +86,14 @@ public class signup_activity extends AppCompatActivity {
                                     FirebaseDatabase.getInstance().getReference("users").
                                             child(firebaseUser.getUid()).setValue(new User(email));
 
-                                    Toast.makeText(signup_activity.this, "User created!"
+                                    Toast.makeText(Register.this, "User created!"
                                             + "UID:" +firebaseUser.getUid() +"Email:" +
                                             firebaseUser.getEmail(), Toast.LENGTH_LONG).show();
 
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(signup_activity.this, "Authentication failed.",
+                                    Toast.makeText(Register.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
