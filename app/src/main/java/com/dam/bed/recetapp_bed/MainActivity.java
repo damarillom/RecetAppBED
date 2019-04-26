@@ -56,8 +56,17 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        //FIREBASE
         Button button = (Button) findViewById(R.id.signout);
+        Button buttonCuest = (Button) findViewById(R.id.buttonToCuest);
+        buttonCuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this, Cuestionario.class));
+            }
+        });
+
+        //FIREBASE
         mAuth = FirebaseAuth.getInstance();
         mAuthListner = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -119,6 +128,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
+
 
         } else if (id == R.id.nav_manage) {
 
