@@ -100,27 +100,28 @@
         android:text="@string/typeofdiet" />
 
     <RadioGroup
+        android:id="@+id/radiogroupDiet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/radioOmnivore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/omnivore" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/radio Vegetarian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/vegetarian" />
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/radioVegan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
