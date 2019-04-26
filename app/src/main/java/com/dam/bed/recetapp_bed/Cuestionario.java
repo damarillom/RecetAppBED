@@ -8,6 +8,6 @@ public class Cuestionario extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.questions);
+        setContentView(R.layout.activity_cuestionario);
     }
 }
