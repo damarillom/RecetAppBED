@@ -9,14 +9,10 @@ public class User {
     public int birthday;
     public String gender;
 
-    public User() {
-
-    }
+    public User() {    }
 
     public User(String emailId) {
         this.emailId = emailId;
-        //this.birthday = new Date();
-        this.gender = "Z";
     }
 
     public User(String emailId, double altura, double peso, int birthday, String gender) {
