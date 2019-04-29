@@ -8,6 +8,7 @@ public class User {
     public double peso;
     public int birthday;
     public String gender;
+    public String diet;
 
     public User() {    }
 
@@ -61,5 +62,13 @@ public class User {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getDiet() {
+        return diet;
+    }
+
+    public void setDiet(String diet) {
+        this.diet = diet;
     }
 }
