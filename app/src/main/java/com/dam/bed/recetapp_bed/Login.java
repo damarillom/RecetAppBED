@@ -133,6 +133,7 @@ public class Login extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            String email = "";
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -141,14 +142,22 @@ public class Login extends AppCompatActivity {
 
                 DatabaseReference usersRef = ref.child("users");
 
-                String email = account.getEmail();
-                FirebaseDatabase.getInstance().getReference("users").child(email.replace("@","-").replace(".","-")).setValue(new User(email));
+
+                email = account.getEmail();
+
+                FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+                //String UID = currentFirebaseUser.getUid();
+                //System.out.println("******************"+UID);
+                FirebaseDatabase.getInstance().getReference("users").child(email.replace("@","\\").replace(".","-")).setValue(new User(email));
+
+
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 // ...
             }
+
         }
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {

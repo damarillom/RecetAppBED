@@ -84,7 +84,7 @@ public class Register extends AppCompatActivity {
                                     System.out.println("display:" + firebaseUser.getDisplayName());
 
                                     FirebaseDatabase.getInstance().getReference("users").
-                                            child(firebaseUser.getUid()).setValue(new User(email));
+                                            child(email.replace("@","\\").replace(".","-")).setValue(new User(email));
 
                                     Toast.makeText(Register.this, "User created!"
                                             + "UID:" +firebaseUser.getUid() +"Email:" +
