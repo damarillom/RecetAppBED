@@ -90,7 +90,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:ems="10"
-        android:inputType="number" />
+        android:inputType="number"
+        android:maxLength="4" />
 
     <TextView
         android:id="@+id/dietLabel"
