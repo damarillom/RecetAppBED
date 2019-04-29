@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -19,9 +22,16 @@ public class Cuestionario extends AppCompatActivity {
     EditText editTextHeight;
     EditText editTextWeight;
     EditText editTextYear;
-    String userHeight;
-    String userWeight;
-    String userYear;
+    double userHeight;
+    double userWeight;
+    int userYear;
+
+    RadioGroup radioGender;
+    RadioGroup radioDiet;
+
+    String gender;
+    String diet;
+
 
     //firebaseauth
     private FirebaseAuth mAuth;
@@ -36,6 +46,8 @@ public class Cuestionario extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+
+
     }
 
     @Override
@@ -46,6 +58,16 @@ public class Cuestionario extends AppCompatActivity {
         editTextWeight= (EditText) findViewById(R.id.weight);
         editTextYear = (EditText) findViewById(R.id.year);
 
+        radioGender = (RadioGroup) findViewById(R.id.radiogroup);
+        radioDiet = (RadioGroup) findViewById(R.id.radiogroupDiet);
+
+        final int radioMale = findViewById(R.id.radioMale).getId();
+        final int radioFemale = findViewById(R.id.radioFemale).getId();
+        final int radioOther = findViewById(R.id.radioOther).getId();
+
+        final int radioVegan = findViewById(R.id.radioVegan).getId();
+        final int radioVeget = findViewById(R.id.radioVegetarian).getId();
+        final int radioOmni = findViewById(R.id.radioOmnivore).getId();
 
 
         System.out.println("uid" + mAuth.getUid());
@@ -58,35 +80,101 @@ public class Cuestionario extends AppCompatActivity {
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Button Accepted, hay que enviarlo a la base de datos");
-                userHeight = editTextHeight.getText().toString();
-                userWeight = editTextWeight.getText().toString();
-                userYear = editTextYear.getText().toString();
-                System.out.println("userHeight = " + userHeight);
-                System.out.println("userWeight = " + userWeight);
-                System.out.println("userYear = " + userYear);
-                //if not null
+                boolean check = true;
+                try {
+                    userHeight = Double.parseDouble(editTextHeight.getText().toString());
+                } catch (NumberFormatException e) {
+                    Toast.makeText(Cuestionario.this, "Fill Height", Toast.LENGTH_SHORT).show();
+                    check = false;
+                }
+                try {
+                    userWeight = Double.parseDouble(editTextWeight.getText().toString());
+                } catch (NumberFormatException e) {
+                    Toast.makeText(Cuestionario.this, "Fill Weight", Toast.LENGTH_SHORT).show();
+                    check = false;
+                }
+                try {
+                    userYear = Integer.parseInt(editTextYear.getText().toString());
+                } catch (NumberFormatException e) {
+                    Toast.makeText(Cuestionario.this, "Fill Year", Toast.LENGTH_SHORT).show();
+                    check = false;
+                }
+
+                int idCheckedGender = radioGender.getCheckedRadioButtonId();
+                int idCheckedDiet = radioDiet.getCheckedRadioButtonId();
+
+                if (idCheckedGender == -1) {
+                    Toast.makeText(Cuestionario.this, "Select Gender", Toast.LENGTH_SHORT).show();
+                    check = false;
+                }
+
+                if (idCheckedDiet == -1) {
+                    Toast.makeText(Cuestionario.this, "Select Diet", Toast.LENGTH_SHORT).show();
+                    check = false;
+                }
+
+                if (check) {
+                    System.out.println("Button Accepted, hay que enviarlo a la base de datos");
+
+
+                    //GENDER
+                    System.out.println("idChecked" + idCheckedGender);
+
+                    if (idCheckedGender == radioMale) {
+                        gender = "M";
+                    } else if (idCheckedGender == radioFemale) {
+                        gender = "F";
+                    } else if (idCheckedGender == radioOther) {
+                        gender = "O";
+                    } else {
+                        System.out.println();
+//                        Toast.makeText(Cuestionario.this, "Select gender", Toast.LENGTH_SHORT).show();
+                    }
+
+                    //DIET
+                    if (idCheckedDiet == radioVegan) {
+                        diet = "Vegan";
+                    } else if (idCheckedDiet == radioVeget) {
+                        diet = "Vegetarian";
+                    } else if (idCheckedDiet == radioOmni) {
+                        diet = "Omniv";
+                    }
+
+                    //if not null
+
+                    System.out.println("userHeight = " + userHeight);
+                    System.out.println("userWeight = " + userWeight);
+                    System.out.println("userYear = " + userYear);
+
 //                FirebaseDatabase.getInstance().getReference("users").
 //                        setValue(new User(mAuth.getUid(), Double.parseDouble(userHeight),
 //                                Double.parseDouble(userWeight), Integer.parseInt(userYear),
 //                                "Z"));
-                String email = mAuth.getCurrentUser().getEmail();
-                String replaceEmail = email.replace("@", "\\").
-                        replace(".", "-");
-                Map<String,Object> datosActualizar = new HashMap<>();
+                    String email = mAuth.getCurrentUser().getEmail();
+                    String replaceEmail = email.replace("@", "\\").
+                            replace(".", "-");
+                    Map<String, Object> datosActualizar = new HashMap<>();
 
-                datosActualizar.put("birthday",userYear);
-                datosActualizar.put("altura",userHeight);
-                datosActualizar.put("peso",userWeight);
-                datosActualizar.put("gender","Z");
-                FirebaseDatabase.getInstance().getReference("users/" + replaceEmail).updateChildren(datosActualizar);
+                    datosActualizar.put("birthday", userYear);
+                    datosActualizar.put("altura", userHeight);
+                    datosActualizar.put("peso", userWeight);
+                    datosActualizar.put("gender", gender);
+                    datosActualizar.put("diet", diet);
+                    FirebaseDatabase.getInstance().getReference("users/" + replaceEmail).updateChildren(datosActualizar);
 
 //                DatabaseReference ref = database.getReference("users/"+"amarilleitor96\\gmail-com");
 //                FirebaseDatabase.getInstance().getReference().getKey(ref);
+
+                }else{
+                    System.out.println("Caca");
+                }
             }
+
         });
 
     }
 
-
 }
+
+
+
