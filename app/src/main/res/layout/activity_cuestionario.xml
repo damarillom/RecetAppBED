@@ -12,7 +12,7 @@
         android:id="@+id/genderLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Gender" />
+        android:text="@string/gender" />
 
     <RadioGroup
         android:id="@+id/radiogroup"
@@ -27,21 +27,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Male" />
+            android:text="@string/male" />
 
         <RadioButton
             android:id="@+id/radioFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Female" />
+            android:text="@string/female" />
 
         <RadioButton
             android:id="@+id/radioOther"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Other" />
+            android:text="@string/other" />
 
     </RadioGroup>
 
@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="Height (cm)" />
+        android:text="@string/height" />
 
     <EditText
         android:id="@+id/height"
@@ -58,14 +58,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:maxLength="3" />
 
     <TextView
         android:id="@+id/weightLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Weight (kg)" />
+        android:text="@string/weight" />
 
     <EditText
         android:id="@+id/weight"
@@ -73,14 +74,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:maxLength="3" />
 
     <TextView
         android:id="@+id/birthLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Year of birthday" />
+        android:text="@string/yearofbirth" />
 
     <EditText
         android:id="@+id/year"
@@ -90,11 +92,48 @@
         android:ems="10"
         android:inputType="number" />
 
-    <Button
-        android:id="@+id/acceptButton"
+    <TextView
+        android:id="@+id/dietLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Accept" />
+        android:text="@string/typeofdiet" />
+
+    <RadioGroup
+        android:id="@+id/radiogroupDiet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioOmnivore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/omnivore" />
+
+        <RadioButton
+            android:id="@+id/radioVegetarian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/vegetarian" />
+
+        <RadioButton
+            android:id="@+id/radioVegan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/vegan" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/acceptButton"
+        style="@style/FirebaseUI.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/accept" />
 
 </LinearLayout>
