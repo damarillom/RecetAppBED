@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cuestionario extends AppCompatActivity {
-
     Button buttonOK;
     EditText editTextHeight;
     EditText editTextWeight;
@@ -32,12 +31,10 @@ public class Cuestionario extends AppCompatActivity {
     String gender;
     String diet;
 
-
     //firebaseauth
     private FirebaseAuth mAuth;
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("recetappbed");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +42,6 @@ public class Cuestionario extends AppCompatActivity {
         setContentView(R.layout.activity_cuestionario);
 
         mAuth = FirebaseAuth.getInstance();
-
-
-
     }
 
     @Override
@@ -69,18 +63,17 @@ public class Cuestionario extends AppCompatActivity {
         final int radioVeget = findViewById(R.id.radioVegetarian).getId();
         final int radioOmni = findViewById(R.id.radioOmnivore).getId();
 
-
         System.out.println("uid" + mAuth.getUid());
         System.out.println("uid current user" + mAuth.getCurrentUser().getUid());
         System.out.println("current user" + mAuth.getCurrentUser());
         System.out.println("current user email" + mAuth.getCurrentUser().getEmail());
-
 
         buttonOK = (Button) findViewById(R.id.acceptButton);
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean check = true;
+                //comprobamos que los campos no estén vacíos
                 try {
                     userHeight = Double.parseDouble(editTextHeight.getText().toString());
                 } catch (NumberFormatException e) {
@@ -113,9 +106,9 @@ public class Cuestionario extends AppCompatActivity {
                     check = false;
                 }
 
+                //si no están vacíos, continuamos
                 if (check) {
                     System.out.println("Button Accepted, hay que enviarlo a la base de datos");
-
 
                     //GENDER
                     System.out.println("idChecked" + idCheckedGender);
@@ -126,9 +119,6 @@ public class Cuestionario extends AppCompatActivity {
                         gender = "F";
                     } else if (idCheckedGender == radioOther) {
                         gender = "O";
-                    } else {
-                        System.out.println();
-//                        Toast.makeText(Cuestionario.this, "Select gender", Toast.LENGTH_SHORT).show();
                     }
 
                     //DIET
@@ -140,18 +130,18 @@ public class Cuestionario extends AppCompatActivity {
                         diet = "Omniv";
                     }
 
-                    //if not null
+                    String email = mAuth.getCurrentUser().getEmail();
+
 
                     System.out.println("userHeight = " + userHeight);
                     System.out.println("userWeight = " + userWeight);
                     System.out.println("userYear = " + userYear);
+                    System.out.println("diet = " + diet);
+                    System.out.println("gender = " + gender);
+                    System.out.println("email = " + email);
 
-//                FirebaseDatabase.getInstance().getReference("users").
-//                        setValue(new User(mAuth.getUid(), Double.parseDouble(userHeight),
-//                                Double.parseDouble(userWeight), Integer.parseInt(userYear),
-//                                "Z"));
-                    String email = mAuth.getCurrentUser().getEmail();
-                    String replaceEmail = email.replace("@", "\\").
+                    //Crear Map para actualizar la BD
+                    String replacedEmail = email.replace("@", "\\").
                             replace(".", "-");
                     Map<String, Object> datosActualizar = new HashMap<>();
 
@@ -160,20 +150,19 @@ public class Cuestionario extends AppCompatActivity {
                     datosActualizar.put("peso", userWeight);
                     datosActualizar.put("gender", gender);
                     datosActualizar.put("diet", diet);
-                    FirebaseDatabase.getInstance().getReference("users/" + replaceEmail).updateChildren(datosActualizar);
+
+                    FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
+                            updateChildren(datosActualizar);
 
 //                DatabaseReference ref = database.getReference("users/"+"amarilleitor96\\gmail-com");
 //                FirebaseDatabase.getInstance().getReference().getKey(ref);
 
                 }else{
-                    System.out.println("Caca");
+                    System.out.println("Algún campo vacío!");
                 }
             }
-
         });
-
     }
-
 }
 
 
