@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".Login" />
         <activity android:name=".Register" />
-        <activity android:name=".Cuestionario"/>
+        <activity android:name=".Cuestionario" />
     </application>
 
 </manifest>

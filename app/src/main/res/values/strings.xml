@@ -24,7 +24,7 @@
     <string name="yearofbirth">Year of birth</string>
     <string name="gender">Gender</string>
     <string name="male">Male</string>
-    <string name="female" >Female</string>
+    <string name="female">Female</string>
     <string name="other">Other</string>
     <string name="accept">Accept</string>
     <string name="typeofdiet">Type of diet</string>
