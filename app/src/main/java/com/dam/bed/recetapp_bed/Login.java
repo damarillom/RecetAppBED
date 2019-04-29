@@ -25,8 +25,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
     private static final String TAG = "test";
@@ -98,9 +102,36 @@ public class Login extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     // there was an error
                                     Log.d(TAG, "signInWithEmail:success");
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+
+                                    //Consulta a la DB
+                                    /**DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users/");
+                                    Query query = reference.child("issue").orderByChild("id").equalTo(0);
+                                    reference.getKey();*/
+                                    ValueEventListener valueEventListener = new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            User user = dataSnapshot.getValue(User.class);
+                                            //System.out.println("*********"+user.getAltura());
+                                            if (user.isQuest()) {
+                                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                Intent intent = new Intent(Login.this, Cuestionario.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            System.out.println("databaseError = " + databaseError);
+                                        }
+                                    };
+                                    String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+                                    FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
+
+
                                 } else {
                                     Log.d(TAG, "signInWithEmail:Fail");
                                     Toast.makeText(Login.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
