@@ -9,6 +9,7 @@ public class User {
     public int birthday;
     public String gender;
     public String diet;
+    private boolean quest;
 
     public User() {    }
 
@@ -70,5 +71,13 @@ public class User {
 
     public void setDiet(String diet) {
         this.diet = diet;
+    }
+
+    public boolean isQuest() {
+        return quest;
+    }
+
+    public void setQuest(boolean quest) {
+        this.quest = quest;
     }
 }
