@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
@@ -27,12 +29,15 @@
         <!-- Signup Button -->
         <Button
             android:id="@+id/btn_signup"
+            style="@style/FirebaseUI.Button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:padding="12dp"
-            android:text="Create Account" />
+            android:text="Create Account"
+            android:textColor="@android:color/black" />
+
         <TextView
             android:id="@+id/login_page"
             android:layout_width="fill_parent"
