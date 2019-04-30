@@ -10,6 +10,9 @@ public class Ingredient {
         this.kcal = kcal;
     }
 
+    public Ingredient() {
+    }
+
     public String getName() {
         return name;
     }
@@ -24,5 +27,13 @@ public class Ingredient {
 
     public void setKcal(int kcal) {
         this.kcal = kcal;
+    }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "name='" + name + '\'' +
+                ", kcal=" + kcal +
+                '}';
     }
 }
