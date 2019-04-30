@@ -1,17 +1,20 @@
 package com.dam.bed.recetapp_bed;
 
-public class Recipes {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Recipe {
 
     private String name;
     private String description;
     private String dietType;
-    private Ingredients[] ingredients;
+    private ArrayList<Ingredient> ingredients;
 
-    public Recipes(String name, String description, String dietType, Ingredients[] ingredients) {
+    public Recipe(String name, String description, String dietType, ArrayList<Ingredient> ingredients) {
         this.name = name;
         this.description = description;
         this.dietType = dietType;
-        this.ingredients = ingredients;
+        this.ingredients = new ArrayList<>(ingredients);
     }
 
     public String getName() {
@@ -38,11 +41,11 @@ public class Recipes {
         this.dietType = dietType;
     }
 
-    public Ingredients[] getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Ingredients[] ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 }

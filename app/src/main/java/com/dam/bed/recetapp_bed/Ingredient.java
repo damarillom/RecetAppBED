@@ -1,11 +1,11 @@
 package com.dam.bed.recetapp_bed;
 
-public class Ingredients {
+public class Ingredient {
 
     private String name;
     private int kcal;
 
-    public Ingredients(String name, int kcal) {
+    public Ingredient(String name, int kcal) {
         this.name = name;
         this.kcal = kcal;
     }
