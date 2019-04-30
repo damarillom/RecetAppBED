@@ -20,13 +20,18 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
     private static final String TAG = "test";
@@ -98,9 +103,39 @@ public class Login extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     // there was an error
                                     Log.d(TAG, "signInWithEmail:success");
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+
+                                    //Consulta a la DB
+                                    /**DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users/");
+                                    Query query = reference.child("issue").orderByChild("id").equalTo(0);
+                                    reference.getKey();*/
+                                    //https://stackoverflow.com/questions/30564735/android-firebase-simply-get-one-child-objects-data
+                                    ValueEventListener valueEventListener = new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            User user = dataSnapshot.getValue(User.class);
+                                            //System.out.println("*********"+user.getAltura());
+                                            if (user.isQuest()) {
+                                                System.out.println("Entra bien");
+                                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                System.out.println("No entra");
+                                                Intent intent = new Intent(Login.this, Cuestionario.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            System.out.println("databaseError = " + databaseError);
+                                        }
+                                    };
+                                    String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+                                    FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
+
+
                                 } else {
                                     Log.d(TAG, "signInWithEmail:Fail");
                                     Toast.makeText(Login.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
@@ -113,7 +148,30 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    startActivity(new Intent(Login.this, MainActivity.class));
+                    ValueEventListener valueEventListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            //System.out.println("*********"+user.getAltura());
+                            if (user.isQuest()) {
+                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(Login.this, Cuestionario.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            System.out.println("databaseError = " + databaseError);
+                        }
+                    };
+                    String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+                    FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
+                    //startActivity(new Intent(Login.this, MainActivity.class));
                 }
             }
         };
@@ -126,6 +184,7 @@ public class Login extends AppCompatActivity {
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -133,22 +192,36 @@ public class Login extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            String email = "";
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
 
 
-                DatabaseReference usersRef = ref.child("users");
+//                DatabaseReference usersRef = ref.child("users");
 
 
-                email = account.getEmail();
+                final String email = account.getEmail();
+                final String replace = email.replace("@","\\").replace(".","-");
 
-                FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
-                //String UID = currentFirebaseUser.getUid();
-                //System.out.println("******************"+UID);
-                FirebaseDatabase.getInstance().getReference("users").child(email.replace("@","\\").replace(".","-")).setValue(new User(email));
+                final Query query = FirebaseDatabase.getInstance().getReference("users").orderByKey().equalTo(replace);
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists()) {
+                            FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                            FirebaseDatabase.getInstance().getReference("users").child(replace).setValue(new User(email));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.dam.bed.recetapp_bed;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -64,9 +65,9 @@ public class Cuestionario extends AppCompatActivity {
         final int radioOmni = findViewById(R.id.radioOmnivore).getId();
 
         System.out.println("uid" + mAuth.getUid());
-        System.out.println("uid current user" + mAuth.getCurrentUser().getUid());
+        //System.out.println("uid current user" + mAuth.getCurrentUser().getUid());
         System.out.println("current user" + mAuth.getCurrentUser());
-        System.out.println("current user email" + mAuth.getCurrentUser().getEmail());
+        //System.out.println("current user email" + mAuth.getCurrentUser().getEmail());
 
         buttonOK = (Button) findViewById(R.id.acceptButton);
         buttonOK.setOnClickListener(new View.OnClickListener() {
@@ -150,12 +151,19 @@ public class Cuestionario extends AppCompatActivity {
                     datosActualizar.put("peso", userWeight);
                     datosActualizar.put("gender", gender);
                     datosActualizar.put("diet", diet);
+                    datosActualizar.put("quest", true);
 
                     FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                             updateChildren(datosActualizar);
 
 //                DatabaseReference ref = database.getReference("users/"+"amarilleitor96\\gmail-com");
 //                FirebaseDatabase.getInstance().getReference().getKey(ref);
+
+
+                    //Go to main
+                    Intent intent = new Intent(Cuestionario.this, MainActivity.class);
+                    startActivity(intent);
+
 
                 }else{
                     System.out.println("Algún campo vacío!");
