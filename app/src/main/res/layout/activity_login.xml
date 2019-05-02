@@ -56,6 +56,11 @@
             android:background="@color/colorAccent"
             android:text="@string/login"
             android:textColor="@android:color/black" />
+        <com.google.android.gms.common.SignInButton
+            android:paddingTop="10dp"
+            android:id="@+id/sign_in_google"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
         <TextView
             android:gravity="center"
             android:id="@+id/sign_in_button"
@@ -65,22 +70,20 @@
             android:background="@null"
             android:text="@string/create_a_new_account"
             android:textAllCaps="false"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textColor="@color/colorLink"/>
         <TextView
             android:gravity="center"
             android:id="@+id/forgot_password"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="5dip"
             android:background="@null"
             android:text="@string/forgot_password"
             android:textAllCaps="false"
-            android:textSize="15sp" />
-        <com.google.android.gms.common.SignInButton
-            android:paddingTop="10dp"
-            android:id="@+id/sign_in_google"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="15sp"
+            android:textColor="@color/colorLink"/>
+
     </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar"

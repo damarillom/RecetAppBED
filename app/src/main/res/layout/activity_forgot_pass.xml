@@ -40,7 +40,8 @@
             android:layout_marginTop="20dip"
             android:gravity="center"
             android:text="Remember your Pasword? Login"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/colorLink"/>
     </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar"
