@@ -64,6 +64,7 @@ public class Login extends AppCompatActivity {
         Button ahlogin = (Button) findViewById(R.id.ah_login);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         TextView btnSignIn = (TextView) findViewById(R.id.sign_in_button);
+        TextView btnForgotPass = (TextView) findViewById(R.id.forgot_password);
         button = (SignInButton) findViewById(R.id.sign_in_google);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +77,12 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Login.this, Register.class));
+            }
+        });
+        btnForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, ForgotPass.class));
             }
         });
         mAuth = FirebaseAuth.getInstance();
