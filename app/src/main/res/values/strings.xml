@@ -14,20 +14,23 @@
     <!-- Twitter consumer key and secret -->
     <!--<string name="twitter_consumer_key" translatable="false">YOUR_CONSUMER_KEY</string>-->
     <!--<string name="twitter_consumer_secret" translatable="false">YOUR_CONSUMER_SECRET</string>-->
-    <string name="email_id">email</string>
-    <string name="password">password</string>
+    <string name="email_id">\tEmail</string>
+    <string name="password">\tPassword</string>
+    <string name="repassword">\tRepeat password</string>
     <string name="login">login</string>
     <string name="create_a_new_account">Create a new account</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="send">Send email</string>
     <string name="failed">Failed</string>
-    <string name="height">Height (cm)</string>
-    <string name="weight">Weight (kg)</string>
-    <string name="yearofbirth">Year of birth</string>
-    <string name="gender">Gender</string>
+    <string name="height">\tHeight (cm)</string>
+    <string name="weight">\tWeight (kg)</string>
+    <string name="yearofbirth">\tYear of birth</string>
+    <string name="gender">\tGender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="other">Other</string>
     <string name="accept">Accept</string>
-    <string name="typeofdiet">Type of diet</string>
+    <string name="typeofdiet">\tType of diet</string>
     <string name="omnivore">Omnivore</string>
     <string name="vegetarian">Vegetarian</string>
     <string name="vegan">Vegan</string>
