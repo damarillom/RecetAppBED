@@ -6,19 +6,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/recipes"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/recipe"
             android:title="Recipes" />
         <item
             android:id="@+id/ingredients"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/carrot"
             android:title="Ingredients" />
         <item
             android:id="@+id/cuest"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/list"
             android:title="Cuestionary" />
         <item
             android:id="@+id/logout"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/logouticon"
             android:title="Logout" />
     </group>
 
@@ -26,7 +26,7 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_menu_camera"
                 android:title="Share" />
             <item
                 android:id="@+id/nav_send"
