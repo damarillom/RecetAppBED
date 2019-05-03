@@ -1,5 +1,10 @@
 package com.dam.bed.recetapp_bed;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import java.util.Objects;
+
 public class Ingredient {
 
     private String name;
@@ -35,5 +40,21 @@ public class Ingredient {
                 "name='" + name + '\'' +
                 ", kcal=" + kcal +
                 '}';
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ingredient that = (Ingredient) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name);
     }
 }

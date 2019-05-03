@@ -24,7 +24,8 @@
         <activity android:name=".Login" />
         <activity android:name=".Register" />
         <activity android:name=".Cuestionario" />
-        <activity android:name=".SelectIngredients"></activity>
+        <activity android:name=".SelectIngredients"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

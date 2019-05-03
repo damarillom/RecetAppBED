@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.dam.bed.recetapp_bed.R.string.searchingredient;
 
@@ -34,6 +36,10 @@ public class SelectIngredients extends AppCompatActivity implements SearchView.O
 
     SearchView mSearchView;
     ListView mListView, mListView2;
+    Button accept;
+
+//    HashSet<Ingredient> contentIngredients = new HashSet<>();
+//    HashSet<Ingredient> contentIngredientsNo = new HashSet<>();
     ArrayList<String> ingredients = new ArrayList<>();
     ArrayList<String> ingredientsNo = new ArrayList<>();
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Ingredients");
@@ -47,6 +53,7 @@ public class SelectIngredients extends AppCompatActivity implements SearchView.O
         mSearchView = findViewById(R.id.searchView);
         mListView = findViewById(R.id.listView);
         mListView2 = findViewById(R.id.listView2);
+        accept = findViewById(R.id.acceptIngredients);
 
         // Conseguir los ingredientes
         ref.addValueEventListener(new ValueEventListener() {
@@ -55,8 +62,9 @@ public class SelectIngredients extends AppCompatActivity implements SearchView.O
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Ingredient ingredient = ds.getValue(Ingredient.class);
-                    System.out.println("ingredient - " + ingredient);
                     ingredients.add(ingredient.getName());
+//                    contentIngredients.add(ingredient);
+                    System.out.println("ingredient - " + ingredient);
                 }
             }
 
@@ -74,6 +82,7 @@ public class SelectIngredients extends AppCompatActivity implements SearchView.O
         mListView.setAdapter(adapter);
         mListView.setBackgroundColor(Color.parseColor("#99ff99"));
         mListView.setTextFilterEnabled(true);
+        mListView.setItemsCanFocus(true);
 
         // Lista 2 - Ingredientes que se excluyen
         final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
@@ -82,24 +91,30 @@ public class SelectIngredients extends AppCompatActivity implements SearchView.O
         mListView2.setAdapter(adapter2);
         mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
 
-        setupSearchView();
+
 
         //Onclick de la lista principal
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = mListView.getItemAtPosition(position);
+                System.out.println("position - " + position);
                 String item = (String) o;
-                Snackbar.make(view, "Adding ingredient: "+item, Snackbar.LENGTH_SHORT).show();
+//                Snackbar.make(view, "Adding ingredient: "+item, Snackbar.LENGTH_SHORT).show();
 
                 // Añadir a la segunda lista
-//                ingredientsNo.add(item);
-                adapter2.add(item);
+                ingredientsNo.add(item);
+//                adapter2.add(item);
+                System.out.println("adding ingredient " + item + " a lista 2");
                 adapter2.notifyDataSetChanged();
 
                 // Eliminar de la lista principal
-                adapter.remove(item);
+//                adapter.remove(item);
+                ingredients.remove(item);
                 adapter.notifyDataSetChanged();
+
+//                mSearchView.clearFocus();
+//                mListView.clearTextFilter();
             }
         });
 
@@ -109,16 +124,30 @@ public class SelectIngredients extends AppCompatActivity implements SearchView.O
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = mListView2.getItemAtPosition(position);
                 String item = (String) o;
-                Snackbar.make(view, "Removing ingredient: "+item, Snackbar.LENGTH_SHORT).show();
+//                Snackbar.make(view, "Removing ingredient: "+item, Snackbar.LENGTH_SHORT).show();
 
                 // Añadir a la primera lista
-//                ingredientsNo.add(item);
-                adapter.add(item);
+                ingredients.add(item);
+//                adapter.add(item);
+                System.out.println("adding ingredient " + item + " a lista 1");
                 adapter.notifyDataSetChanged();
 
                 // Eliminar de la lista secundaria
-                adapter2.remove(item);
+//                adapter2.remove(item);
+                ingredientsNo.remove(item);
                 adapter2.notifyDataSetChanged();
+            }
+        });
+
+        setupSearchView();
+
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Lista de ingredientes que se excluyen");
+                for (String s : ingredientsNo) {
+                    System.out.println(s);
+                }
             }
         });
     }
@@ -128,6 +157,13 @@ public class SelectIngredients extends AppCompatActivity implements SearchView.O
         mSearchView.setOnQueryTextListener(this);
 //        mSearchView.setSubmitButtonEnabled(true);
         mSearchView.setQueryHint("Search ingredient");
+//        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                mSearchView.clearFocus();
+//                return true;
+//            }
+//        });
     }
 
     @Override
