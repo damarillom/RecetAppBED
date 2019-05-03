@@ -34,5 +34,9 @@
     <string name="omnivore">Omnivore</string>
     <string name="vegetarian">Vegetarian</string>
     <string name="vegan">Vegan</string>
+    <string name="emailempty">Email is empty</string>
+    <string name="passempty">Password is empty</string>
+    <string name="passnotmatch">Passwords do not match</string>
+    <string name="authfail">Authentication failed.</string>
 
 </resources>
