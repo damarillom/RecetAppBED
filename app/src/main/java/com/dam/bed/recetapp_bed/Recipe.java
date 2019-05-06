@@ -8,13 +8,18 @@ public class Recipe {
     private String name;
     private String description;
     private String dietType;
-    private ArrayList<Ingredient> ingredients;
+    private ArrayList<String> ingredients;
+    private int image;
 
-    public Recipe(String name, String description, String dietType, ArrayList<Ingredient> ingredients) {
+    public Recipe() {
+    }
+
+    public Recipe(String name, String description, String dietType, ArrayList<String> ingredients, int image) {
         this.name = name;
         this.description = description;
         this.dietType = dietType;
         this.ingredients = new ArrayList<>(ingredients);
+        this.image = image;
     }
 
     public String getName() {
@@ -41,11 +46,13 @@ public class Recipe {
         this.dietType = dietType;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
+    public ArrayList<String> getIngredients() { return ingredients; }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
+    public void setIngredients(ArrayList<String> ingredients) {
         this.ingredients = ingredients;
     }
+
+    public int getImage() { return image; }
+
+    public void setImage(int image) { this.image = image; }
 }
