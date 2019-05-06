@@ -53,16 +53,16 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        Button button = (Button) findViewById(R.id.signout);
+        //En este comentario esta el codigo de enviar el correo de reset password
+        /**Button button = (Button) findViewById(R.id.signout);
         Button buttonCuest = (Button) findViewById(R.id.buttonToCuest);
         buttonCuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(new Intent(MainActivity.this, Cuestionario.class));
+                mAuth.sendPasswordResetEmail("amarilleitor96@gmail.com");
+                //startActivity(new Intent(MainActivity.this, Cuestionario.class));
             }
-        });
+        });*/
 
         //FIREBASE
         mAuth = FirebaseAuth.getInstance();
@@ -75,12 +75,12 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
-        button.setOnClickListener(new View.OnClickListener() {
+        /**button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
             }
-        });
+        });*/
     }
 
     @Override
@@ -121,15 +121,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.recipes) {
+            startActivity(new Intent(MainActivity.this, RecipeList.class));
+        } else if (id == R.id.ingredients) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.cuest) {
+            startActivity(new Intent(MainActivity.this, Cuestionario.class));
+        } else if (id == R.id.logout) {
+            mAuth.signOut();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

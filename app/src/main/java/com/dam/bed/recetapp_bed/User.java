@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class User {
     public String emailId;
-    public double altura;
-    public double peso;
+    public int altura;
+    public int peso;
     public int birthday;
     public String gender;
     public String diet;
@@ -17,14 +17,6 @@ public class User {
 
     public User(String emailId) {
         this.emailId = emailId;
-    }
-
-    public User(String emailId, double altura, double peso, int birthday, String gender) {
-        this.emailId = emailId;
-        this.altura = altura;
-        this.peso = peso;
-        this.birthday = birthday;
-        this.gender = gender;
     }
 
     public String getEmailId() {
@@ -39,7 +31,7 @@ public class User {
         return altura;
     }
 
-    public void setAltura(double altura) {
+    public void setAltura(int altura) {
         this.altura = altura;
     }
 
@@ -47,7 +39,7 @@ public class User {
         return peso;
     }
 
-    public void setPeso(double peso) {
+    public void setPeso(int peso) {
         this.peso = peso;
     }
 

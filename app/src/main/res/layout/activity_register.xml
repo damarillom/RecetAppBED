@@ -13,19 +13,41 @@
         android:paddingRight="24dp"
         android:paddingTop="56dp">
         <!-- Email Label -->
+        <TextView
+            android:id="@+id/email_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="@string/email_id" />
         <EditText
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
             android:inputType="textEmailAddress" />
         <!-- Password Label -->
+        <TextView
+            android:id="@+id/pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password" />
         <EditText
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
             android:inputType="textPassword" />
+
+        <!-- Password Label -->
+        <TextView
+            android:id="@+id/repass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/repassword" />
+        <EditText
+            android:id="@+id/input_repassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
         <!-- Signup Button -->
         <Button
             android:id="@+id/btn_signup"
@@ -45,7 +67,8 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="Already a member? Login"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/colorLink"/>
     </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar"

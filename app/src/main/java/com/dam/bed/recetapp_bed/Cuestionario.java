@@ -1,6 +1,7 @@
 package com.dam.bed.recetapp_bed;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,8 +12,11 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +54,7 @@ public class Cuestionario extends AppCompatActivity {
         super.onStart();
 
         editTextHeight = (EditText) findViewById(R.id.height);
-        editTextWeight= (EditText) findViewById(R.id.weight);
+        editTextWeight = (EditText) findViewById(R.id.weight);
         editTextYear = (EditText) findViewById(R.id.year);
 
         radioGender = (RadioGroup) findViewById(R.id.radiogroup);
@@ -63,6 +67,49 @@ public class Cuestionario extends AppCompatActivity {
         final int radioVegan = findViewById(R.id.radioVegan).getId();
         final int radioVeget = findViewById(R.id.radioVegetarian).getId();
         final int radioOmni = findViewById(R.id.radioOmnivore).getId();
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                //System.out.println("*********"+user.getAltura());
+                if (user.isQuest()) {
+                    editTextHeight.setText(Double.toString(user.getAltura()));
+                    editTextWeight.setText(Double.toString(user.getPeso()));
+                    editTextYear.setText(Integer.toString(user.getBirthday()));
+                    String gender = user.getGender();
+                    String diet = user.getDiet();
+                    RadioButton radioM = (RadioButton) findViewById(R.id.radioMale);
+                    RadioButton radioF = (RadioButton) findViewById(R.id.radioFemale);
+                    RadioButton radioO = (RadioButton) findViewById(R.id.radioOther);
+                    RadioButton radioVegano = (RadioButton) findViewById(R.id.radioVegan);
+                    RadioButton radioVegetarian = (RadioButton) findViewById(R.id.radioVegetarian);
+                    RadioButton radioOmnivore = (RadioButton) findViewById(R.id.radioOmnivore);
+                    if (gender.equals("M")) {
+                        radioM.setChecked(true);
+                    } else if (gender.equals("F")) {
+                        radioF.setChecked(true);
+                    } else if (gender.equals("O")) {
+                        radioO.setChecked(true);
+                    }
+                    if (diet.equals("Omniv")) {
+                        radioOmnivore.setChecked(true);
+                    } else if (diet.equals("Vegetarian")) {
+                        radioVegetarian.setChecked(true);
+                    } else if (diet.equals("Vegan")) {
+                        radioVegano.setChecked(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("databaseError = " + databaseError);
+            }
+        };
+        String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+        FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
+
 
         System.out.println("uid" + mAuth.getUid());
         //System.out.println("uid current user" + mAuth.getCurrentUser().getUid());
