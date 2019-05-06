@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.recipes) {
-            // Handle the camera action
+            startActivity(new Intent(MainActivity.this, RecipeList.class));
         } else if (id == R.id.ingredients) {
 
         } else if (id == R.id.cuest) {

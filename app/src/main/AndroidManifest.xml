@@ -26,6 +26,7 @@
         <activity android:name=".Cuestionario" />
         <activity android:name=".ForgotPass" />
         <activity android:name=".RecipeView"></activity>
+        <activity android:name=".RecipeList"></activity>
     </application>
 
 </manifest>
