@@ -55,7 +55,7 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         //check the current user
         if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(Login.this, SelectIngredients.class));
+            startActivity(new Intent(Login.this, MainActivity.class));
             finish();
         }
         setContentView(R.layout.activity_login);
@@ -154,7 +154,7 @@ public class Login extends AppCompatActivity {
                             User user = dataSnapshot.getValue(User.class);
                             //System.out.println("*********"+user.getAltura());
                             if (user.isQuest()) {
-                                Intent intent = new Intent(Login.this, SelectIngredients.class);
+                                Intent intent = new Intent(Login.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
