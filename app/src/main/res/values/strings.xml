@@ -38,5 +38,6 @@
     <string name="passempty">Password is empty</string>
     <string name="passnotmatch">Passwords do not match</string>
     <string name="authfail">Authentication failed.</string>
+    <string name="searchingredient">Search ingredient...</string>
 
 </resources>
