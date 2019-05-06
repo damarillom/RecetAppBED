@@ -1,6 +1,7 @@
 package com.dam.bed.recetapp_bed;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class ListViewAdapterRecipe extends BaseAdapter{
     }
 
     public class ViewHolder{
-        TextView titleRecipe, durationRecipe;
+        TextView titleRecipe, typeRecipe;
         ImageView iconRecipe;
     }
 
@@ -53,7 +54,7 @@ public class ListViewAdapterRecipe extends BaseAdapter{
             convertView = inflater.inflate(R.layout.row_recipe, null);
 
             holder.titleRecipe = convertView.findViewById(R.id.titleRecipe);
-            holder.durationRecipe = convertView.findViewById(R.id.durationRecipe);
+            holder.typeRecipe = convertView.findViewById(R.id.typeRecipe);
             holder.iconRecipe = convertView.findViewById(R.id.recipeIcon);
 
             convertView.setTag(holder);
@@ -62,13 +63,15 @@ public class ListViewAdapterRecipe extends BaseAdapter{
         }
 
         holder.titleRecipe.setText(recipeList.get(position).getName());
-        holder.durationRecipe.setText(recipeList.get(position).getDietType());
+        holder.typeRecipe.setText(recipeList.get(position).getType());
         holder.iconRecipe.setImageResource(recipeList.get(position).getImage());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO on click go to recipe
+                //a la pantalla de Dani, PUT EXTRA
+                Intent intent = new Intent(v.getContext(), RecipeView.class);
+                mContext.startActivity(intent);
             }
         });
         return convertView;
