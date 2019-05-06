@@ -54,15 +54,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //En este comentario esta el codigo de enviar el correo de reset password
-        /**Button button = (Button) findViewById(R.id.signout);
+        Button button = (Button) findViewById(R.id.signout);
         Button buttonCuest = (Button) findViewById(R.id.buttonToCuest);
         buttonCuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.sendPasswordResetEmail("amarilleitor96@gmail.com");
-                //startActivity(new Intent(MainActivity.this, Cuestionario.class));
+                //mAuth.sendPasswordResetEmail("amarilleitor96@gmail.com");
+                startActivity(new Intent(MainActivity.this, RecipeView.class));
             }
-        });*/
+        });
 
         //FIREBASE
         mAuth = FirebaseAuth.getInstance();
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.recipes) {
             startActivity(new Intent(MainActivity.this, RecipeList.class));
         } else if (id == R.id.ingredients) {
-
+            startActivity(new Intent(MainActivity.this, SelectIngredients.class));
         } else if (id == R.id.cuest) {
             startActivity(new Intent(MainActivity.this, Cuestionario.class));
         } else if (id == R.id.logout) {
