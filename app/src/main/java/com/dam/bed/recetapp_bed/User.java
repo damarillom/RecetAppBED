@@ -1,5 +1,6 @@
 package com.dam.bed.recetapp_bed;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
@@ -10,6 +11,7 @@ public class User {
     public String gender;
     public String diet;
     private boolean quest;
+    private ArrayList<String> ingredients;
 
     public User() {    }
 
@@ -79,5 +81,13 @@ public class User {
 
     public void setQuest(boolean quest) {
         this.quest = quest;
+    }
+
+    public ArrayList<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(ArrayList<String> ingredients) {
+        this.ingredients = ingredients;
     }
 }

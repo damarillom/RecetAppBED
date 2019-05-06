@@ -31,6 +31,6 @@
     <string name="omnivore">Omnivore</string>
     <string name="vegetarian">Vegetarian</string>
     <string name="vegan">Vegan</string>
-    <string name="searchingredient">Search ingredient</string>
+    <string name="searchingredient">Search ingredient...</string>
 
 </resources>
