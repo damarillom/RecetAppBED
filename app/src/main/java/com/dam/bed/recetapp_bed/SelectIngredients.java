@@ -34,6 +34,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -73,6 +74,25 @@ public class SelectIngredients extends AppCompatActivity {
         mListView2 = findViewById(R.id.listView2);
         accept = findViewById(R.id.acceptIngredients);
 
+        // Añadir los ingredientes a la lista
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_expandable_list_item_1,
+                ingredients);
+
+        // Lista 2 - Ingredientes que se excluyen
+        final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
+                android.R.layout.simple_expandable_list_item_1,
+                ingredientsNo);
+
+        mListView.setAdapter(adapter);
+        mListView.setBackgroundColor(Color.parseColor("#99ff99"));
+        mListView.setTextFilterEnabled(true);
+        mListView.setItemsCanFocus(true);
+
+        mListView2.setAdapter(adapter2);
+        mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
+
         refUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -83,6 +103,7 @@ public class SelectIngredients extends AppCompatActivity {
                     ingredientsNo.add(ingredient);
                     System.out.println("ingredient - " + ingredient);
                 }
+                adapter2.notifyDataSetChanged();
             }
 
             @Override
@@ -97,6 +118,7 @@ public class SelectIngredients extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 System.out.println("Añadiento ingredients a lista 1");
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Ingredient ingredient = ds.getValue(Ingredient.class);
                     if (!ingredientsNo.contains(ingredient.getName())) {
@@ -105,6 +127,7 @@ public class SelectIngredients extends AppCompatActivity {
 //                    contentIngredients.add(ingredient);
                     System.out.println("ingredient - " + ingredient);
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -113,24 +136,6 @@ public class SelectIngredients extends AppCompatActivity {
             }
         });
 
-
-
-        // Añadir los ingredientes a la lista
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_expandable_list_item_1,
-                ingredients);
-        mListView.setAdapter(adapter);
-        mListView.setBackgroundColor(Color.parseColor("#99ff99"));
-        mListView.setTextFilterEnabled(true);
-        mListView.setItemsCanFocus(true);
-
-        // Lista 2 - Ingredientes que se excluyen
-        final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
-                android.R.layout.simple_expandable_list_item_1,
-                ingredientsNo);
-        mListView2.setAdapter(adapter2);
-        mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
 
 
 
@@ -145,7 +150,7 @@ public class SelectIngredients extends AppCompatActivity {
 
                 // Añadir a la segunda lista
                 ingredientsNo.add(item);
-//                adapter2.add(item);
+                Collections.sort(ingredientsNo);    // Ordernar lista 2
                 System.out.println("adding ingredient " + item + " a lista 2");
                 adapter2.notifyDataSetChanged();
 
@@ -167,14 +172,13 @@ public class SelectIngredients extends AppCompatActivity {
                 String item = (String) o;
 //                Snackbar.make(view, "Removing ingredient: "+item, Snackbar.LENGTH_SHORT).show();
 
-                // Añadir a la primera lista
-                ingredients.add(item);
-//                adapter.add(item);
+
+                ingredients.add(item);          // Añadir a la primera lista
+                Collections.sort(ingredients);  // Ordenar la lista
                 System.out.println("adding ingredient " + item + " a lista 1");
                 adapter.notifyDataSetChanged();
 
                 // Eliminar de la lista secundaria
-//                adapter2.remove(item);
                 ingredientsNo.remove(item);
                 adapter2.notifyDataSetChanged();
             }
@@ -189,6 +193,7 @@ public class SelectIngredients extends AppCompatActivity {
                 saveIngredients(ingredientsNo);
             }
         });
+
     }
 
     /**
@@ -207,6 +212,8 @@ public class SelectIngredients extends AppCompatActivity {
 
         FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                 updateChildren(ingredientsMap);
+
+        Toast.makeText(this, R.string.added_ingredients, Toast.LENGTH_SHORT).show();
     }
 
 
