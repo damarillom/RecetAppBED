@@ -49,6 +49,8 @@ public class SelectIngredients extends AppCompatActivity {
 
     ArrayList<String> ingredients = new ArrayList<>();
     ArrayList<String> ingredientsNo = new ArrayList<>();
+    static ArrayAdapter<String> adapter;
+    static ArrayAdapter<String> adapter2;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Ingredients");
 
     private FirebaseAuth mAuth;
@@ -66,7 +68,7 @@ public class SelectIngredients extends AppCompatActivity {
         email = mAuth.getCurrentUser().getEmail();
         replacedEmail = email.replace("@", "\\").
                 replace(".", "-");
-        DatabaseReference refUser = database.getReference("users/" + replacedEmail + "/ingredients");
+        DatabaseReference userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
 
         //View elements
 //        mSearchView = findViewById(R.id.action_search);
@@ -75,13 +77,13 @@ public class SelectIngredients extends AppCompatActivity {
         accept = findViewById(R.id.acceptIngredients);
 
         // Añadir los ingredientes a la lista
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_expandable_list_item_1,
                 ingredients);
 
         // Lista 2 - Ingredientes que se excluyen
-        final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
+        adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_expandable_list_item_1,
                 ingredientsNo);
 
@@ -93,7 +95,7 @@ public class SelectIngredients extends AppCompatActivity {
         mListView2.setAdapter(adapter2);
         mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
 
-        refUser.addValueEventListener(new ValueEventListener() {
+        userIngredients.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -217,7 +219,7 @@ public class SelectIngredients extends AppCompatActivity {
     }
 
 
-    //    private void setupSearchView() {
+//        private void setupSearchView() {
 //        mSearchView.setIconifiedByDefault(false);
 //        mSearchView.setOnQueryTextListener(this);
 ////        mSearchView.setSubmitButtonEnabled(true);
@@ -240,28 +242,37 @@ public class SelectIngredients extends AppCompatActivity {
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getText(R.string.searchingredient));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                //se oculta el EditText
-//                searchView.setQuery("", false);
-//                searchView.setIconified(true);
-//                return true;
-//            }
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (TextUtils.isEmpty(newText)) {
-//                    mListView.clearTextFilter();
-//                } else {
-//                    mListView.setFilterText(newText);
-//                    System.out.println("Lista ingredients");
-//                    for (String ingredient : ingredients) {
-//                        System.out.println(ingredient);
-//                    }
-//                }
-//                return true;
-//            }
-//        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //se oculta el EditText
+                searchView.setQuery("", false);
+                searchView.setIconified(true);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)) {
+                    mListView.clearTextFilter();
+                } else {
+                    mListView.setFilterText(newText);
+                    adapter.notifyDataSetChanged();
+                }
+                return true;
+            }
+        });
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int i) {
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int i) {
+                Toast.makeText(SelectIngredients.this, "", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 }
