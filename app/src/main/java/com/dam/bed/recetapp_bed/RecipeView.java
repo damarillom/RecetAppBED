@@ -26,6 +26,8 @@ public class RecipeView extends AppCompatActivity {
     static ImageView image;
     final long ONE_MEGABYTE = 1024 * 1024;
 
+    static String img = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,35 +38,18 @@ public class RecipeView extends AppCompatActivity {
         ingredients = (TextView) findViewById(R.id.ingredients);
         description = (TextView) findViewById(R.id.description);
         String name = "Pollo con arroz";
+        if (savedInstanceState != null) {
+            name = savedInstanceState.getString("Name", "Pollo con arroz");
+        }
         title.setText(name);
-        ingredientes = "Ingredientes:\n";
-
-        //PRUEBA STORAGE
-        // Create a storage reference from our app
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-
-        StorageReference imageRef = storageRef.child("quinoas.jpg");
-
-        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                image.setImageBitmap(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
+        ingredientes = "Ingredientes:\n\n";
 
 
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Recipe recipe = dataSnapshot.getValue(Recipe.class);
-                System.out.println("************************"+recipe.getName());
-                //System.out.println("*********"+user.getAltura());
+
                 for(int x=0;x<recipe.getIngredients().size();x++) {
                     System.out.println(recipe.getIngredients().get(x));
                     ingredientes += "\t- " + recipe.getIngredients().get(x) + "\n";
@@ -72,7 +57,27 @@ public class RecipeView extends AppCompatActivity {
 
                 ingredients.setText(ingredientes);
 
-                description.setText(recipe.getDescription());
+                description.setText("Pasos a seguir:\n\n" + recipe.getDescription());
+
+                img = recipe.getImg();
+
+                //STORAGE
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+                StorageReference imageRef = storageRef.child(img);
+
+                imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        image.setImageBitmap(bitmap);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
             }
 
             @Override
@@ -81,5 +86,8 @@ public class RecipeView extends AppCompatActivity {
             }
         };
         FirebaseDatabase.getInstance().getReference("Recipes/" + name).addValueEventListener(valueEventListener);
+
+
+
     }
 }
