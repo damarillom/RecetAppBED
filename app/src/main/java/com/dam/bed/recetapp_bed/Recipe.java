@@ -13,17 +13,17 @@ public class Recipe {
     private String description;
     private String type;
     private ArrayList<String> ingredients;
-    private int image;
+    private String img;
 
     public Recipe() {
     }
 
-    public Recipe(String name, String description, String dietType, ArrayList<String> ingredients, int image) {
+    public Recipe(String name, String description, String dietType, ArrayList<String> ingredients, String image) {
         this.name = name;
         this.description = description;
         this.type = dietType;
         this.ingredients = new ArrayList<>(ingredients);
-        this.image = image;
+        this.img = image;
     }
 
     public String getName() {
@@ -56,9 +56,13 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public int getImage() { return image; }
+    public String getImg() {
+        return img;
+    }
 
-    public void setImage(int image) { this.image = image; }
+    public void setImg(String image) {
+        this.img = image;
+    }
 
     @Override
     public String toString() {
@@ -67,7 +71,7 @@ public class Recipe {
                 ", description='" + description + '\'' +
                 ", dietType='" + type + '\'' +
                 ", ingredients=" + ingredients +
-                ", image=" + image +
+                ", image=" + img +
                 '}';
     }
 
@@ -83,7 +87,6 @@ public class Recipe {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-
         return Objects.hash(name);
     }
 }

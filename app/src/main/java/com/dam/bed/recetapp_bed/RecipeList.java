@@ -3,7 +3,6 @@ package com.dam.bed.recetapp_bed;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -40,23 +39,12 @@ public class RecipeList extends AppCompatActivity {
 //                System.out.println("arrayList Recipes****************************= " + arrayList);
                 adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
                 listView.setAdapter(adapter);
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                System.out.println("error" + databaseError.getMessage());
             }
         };
         FirebaseDatabase.getInstance().getReference("Recipes/").addValueEventListener(valueEventListener);
-
-
-//        Recipe rec1 = new Recipe("Carne", "N o use", "Carne",
-//                new ArrayList<String>(), R.drawable.quinoas);
-//        Recipe rec2 = new Recipe("Cosa 2", "N sdfsdfsdfsdfe", "Vegetal", new ArrayList<String>(),R.drawable.quinoas);
-//        arrayList.add(rec1);
-//        arrayList.add(rec2);
-
-
     }
 }
