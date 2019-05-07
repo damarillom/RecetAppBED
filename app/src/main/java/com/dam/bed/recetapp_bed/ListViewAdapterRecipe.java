@@ -103,7 +103,7 @@ public class ListViewAdapterRecipe extends BaseAdapter{
 
                 Intent intent = new Intent(mContext.getApplicationContext(), RecipeView.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(holder.titleRecipe.getText().toString(),"Name");
+                intent.putExtra("Name", holder.titleRecipe.getText().toString());
 //                System.out.println("*********" + holder.titleRecipe.getText().toString());
                 mContext.startActivity(intent);
             }
