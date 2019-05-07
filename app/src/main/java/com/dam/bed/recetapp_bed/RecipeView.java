@@ -38,8 +38,13 @@ public class RecipeView extends AppCompatActivity {
         ingredients = (TextView) findViewById(R.id.ingredients);
         description = (TextView) findViewById(R.id.description);
         String name = "Pollo con arroz";
-        if (savedInstanceState != null) {
-            name = savedInstanceState.getString("Name", "Pollo con arroz");
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                name = extras.getString("Name");
+                System.out.println("*********************" + name);
+            }
+
         }
         title.setText(name);
         ingredientes = "Ingredientes:\n\n";
