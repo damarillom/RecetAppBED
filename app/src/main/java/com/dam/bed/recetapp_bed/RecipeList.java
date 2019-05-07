@@ -1,9 +1,15 @@
 package com.dam.bed.recetapp_bed;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -22,13 +28,35 @@ public class RecipeList extends AppCompatActivity {
         listView = findViewById(R.id.listViewRecipeList);
 
 
-        Recipe rec1 = new Recipe("Carne", "N o use", "Carne",
-                new ArrayList<String>(), R.drawable.quinoas);
-        Recipe rec2 = new Recipe("Cosa 2", "N sdfsdfsdfsdfe", "Vegetal", new ArrayList<String>(),R.drawable.quinoas);
-        arrayList.add(rec1);
-        arrayList.add(rec2);
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    Recipe recipe = ds.getValue(Recipe.class);
+//                    System.out.println("recipe = " + recipe);
+                    arrayList.add(recipe);
+                }
 
-        adapter = new ListViewAdapterRecipe(this, arrayList);
-        listView.setAdapter(adapter);
+//                System.out.println("arrayList Recipes****************************= " + arrayList);
+                adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
+                listView.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        FirebaseDatabase.getInstance().getReference("Recipes/").addValueEventListener(valueEventListener);
+
+
+//        Recipe rec1 = new Recipe("Carne", "N o use", "Carne",
+//                new ArrayList<String>(), R.drawable.quinoas);
+//        Recipe rec2 = new Recipe("Cosa 2", "N sdfsdfsdfsdfe", "Vegetal", new ArrayList<String>(),R.drawable.quinoas);
+//        arrayList.add(rec1);
+//        arrayList.add(rec2);
+
+
     }
 }

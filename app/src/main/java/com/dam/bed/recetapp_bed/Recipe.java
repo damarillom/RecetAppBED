@@ -1,13 +1,17 @@
 package com.dam.bed.recetapp_bed;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Recipe {
 
     private String name;
     private String description;
-    private String dietType;
+    private String type;
     private ArrayList<String> ingredients;
     private int image;
 
@@ -17,7 +21,7 @@ public class Recipe {
     public Recipe(String name, String description, String dietType, ArrayList<String> ingredients, int image) {
         this.name = name;
         this.description = description;
-        this.dietType = dietType;
+        this.type = dietType;
         this.ingredients = new ArrayList<>(ingredients);
         this.image = image;
     }
@@ -38,12 +42,12 @@ public class Recipe {
         this.description = description;
     }
 
-    public String getDietType() {
-        return dietType;
+    public String getType() {
+        return type;
     }
 
-    public void setDietType(String dietType) {
-        this.dietType = dietType;
+    public void setType(String dietType) {
+        this.type = dietType;
     }
 
     public ArrayList<String> getIngredients() { return ingredients; }
@@ -55,4 +59,31 @@ public class Recipe {
     public int getImage() { return image; }
 
     public void setImage(int image) { this.image = image; }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", dietType='" + type + '\'' +
+                ", ingredients=" + ingredients +
+                ", image=" + image +
+                '}';
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Recipe recipe = (Recipe) o;
+        return Objects.equals(name, recipe.name);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name);
+    }
 }
