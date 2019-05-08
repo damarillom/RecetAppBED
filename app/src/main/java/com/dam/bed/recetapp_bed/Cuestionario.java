@@ -26,8 +26,8 @@ public class Cuestionario extends AppCompatActivity {
     EditText editTextHeight;
     EditText editTextWeight;
     EditText editTextYear;
-    double userHeight;
-    double userWeight;
+    int userHeight;
+    int userWeight;
     int userYear;
 
     RadioGroup radioGender;
@@ -74,8 +74,8 @@ public class Cuestionario extends AppCompatActivity {
                 User user = dataSnapshot.getValue(User.class);
                 //System.out.println("*********"+user.getAltura());
                 if (user.isQuest()) {
-                    editTextHeight.setText(Double.toString(user.getAltura()));
-                    editTextWeight.setText(Double.toString(user.getPeso()));
+                    editTextHeight.setText(Integer.toString(user.getAltura()));
+                    editTextWeight.setText(Integer.toString(user.getPeso()));
                     editTextYear.setText(Integer.toString(user.getBirthday()));
                     String gender = user.getGender();
                     String diet = user.getDiet();
@@ -123,13 +123,13 @@ public class Cuestionario extends AppCompatActivity {
                 boolean check = true;
                 //comprobamos que los campos no estén vacíos
                 try {
-                    userHeight = Double.parseDouble(editTextHeight.getText().toString());
+                    userHeight = Integer.parseInt(editTextHeight.getText().toString());
                 } catch (NumberFormatException e) {
                     Toast.makeText(Cuestionario.this, "Fill Height", Toast.LENGTH_SHORT).show();
                     check = false;
                 }
                 try {
-                    userWeight = Double.parseDouble(editTextWeight.getText().toString());
+                    userWeight = Integer.parseInt(editTextWeight.getText().toString());
                 } catch (NumberFormatException e) {
                     Toast.makeText(Cuestionario.this, "Fill Weight", Toast.LENGTH_SHORT).show();
                     check = false;
