@@ -40,5 +40,6 @@
     <string name="authfail">Authentication failed.</string>
     <string name="searchingredient">Search ingredient...</string>
     <string name="added_ingredients">Ingredients saved</string>
+    <string name="excludeIngredients">Ingredients to exclude</string>
 
 </resources>
