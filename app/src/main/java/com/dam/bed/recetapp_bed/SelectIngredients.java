@@ -247,7 +247,11 @@ public class SelectIngredients extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("Lista de ingredientes que se excluyen");
-                saveIngredients(ingredientsNo);
+                HashSet<String> tmpLista = new HashSet<>();
+                for (String s : ingredientsNo) {
+                    tmpLista.add(s);
+                }
+                saveIngredients(tmpLista);
             }
         });
 
@@ -257,11 +261,14 @@ public class SelectIngredients extends AppCompatActivity {
      * Guarda en la base de datos los ingredients que el usuario no quiere
      * @param ingredients
      */
-    private void saveIngredients(ArrayList<String> ingredients) {
+    private void saveIngredients(HashSet<String> ingredients) {
 
+        System.out.println("Save ingredients");
         for (String s : ingredients) {
             System.out.println(s);
         }
+
+        System.out.println("Cantidad items " + adapter2.getCount());
 
 
         Map<String, Object> ingredientsMap = new HashMap<>();
