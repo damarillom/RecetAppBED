@@ -53,12 +53,16 @@ public class SelectIngredients extends AppCompatActivity {
     static ArrayAdapter<String> adapter;
     static ArrayAdapter<String> adapter2;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Ingredients");
+    DatabaseReference userIngredients;
 
     private FirebaseAuth mAuth;
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    String email;
-    String replacedEmail;
+    String email, replacedEmail;
+    String diet = "";
+    final int OMNIV = 2;
+    final int VEGETARIAN = 1;
+    final int VEGAN = 0;
 
     // Conseguir dieta usuario
     // Filtrar ingredientes
@@ -75,7 +79,8 @@ public class SelectIngredients extends AppCompatActivity {
         email = mAuth.getCurrentUser().getEmail();
         replacedEmail = email.replace("@", "\\").
                 replace(".", "-");
-        DatabaseReference userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
+        userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
+        final DatabaseReference userListener = database.getReference("users/" + replacedEmail);
 
         //View elements
 //        mSearchView = findViewById(R.id.action_search);
@@ -102,6 +107,66 @@ public class SelectIngredients extends AppCompatActivity {
         mListView2.setAdapter(adapter2);
         mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
 
+        userListener.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                diet = user.getDiet();
+
+                // Conseguir los ingredientes
+                ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        System.out.println("Añadiendo ingredients a lista 1");
+
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                            Ingredient ingredient = ds.getValue(Ingredient.class);
+
+                            // FILTRAR INGREDIENTES POR EL TIPO DE DIETA DEL USUARIO
+                            if (diet.equalsIgnoreCase("Omniv")) {
+                                if (!ingredientsNo.contains(ingredient.getName())) {
+                                    ingredients.add(ingredient.getName());
+                                }
+                            }
+                            else if (diet.equalsIgnoreCase("Vegetarian")) {
+                                if (ingredient.getType() == VEGAN ||
+                                        ingredient.getType() == VEGETARIAN) {     // Coge el 1 y el 2
+
+                                    if (!ingredientsNo.contains(ingredient.getName())) {
+                                        ingredients.add(ingredient.getName());
+                                    }
+                                }
+                            }
+                            else if (diet.equalsIgnoreCase("Vegan")) {
+                                if (ingredient.getType() == VEGAN) {    // Coge el 0
+
+                                    if (!ingredientsNo.contains(ingredient.getName())) {
+                                        ingredients.add(ingredient.getName());
+                                    }
+                                }
+                            }
+
+                            System.out.println("ingredient - " + ingredient);
+
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         userIngredients.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -118,30 +183,6 @@ public class SelectIngredients extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-
-        // Conseguir los ingredientes
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                System.out.println("Añadiendo ingredients a lista 1");
-
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Ingredient ingredient = ds.getValue(Ingredient.class);
-                    if (!ingredientsNo.contains(ingredient.getName())) {
-                        ingredients.add(ingredient.getName());
-                    }
-//                    contentIngredients.add(ingredient);
-                    System.out.println("ingredient - " + ingredient);
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
 

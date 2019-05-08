@@ -9,10 +9,12 @@ public class Ingredient {
 
     private String name;
     private int kcal;
+    private int type;
 
-    public Ingredient(String name, int kcal) {
+    public Ingredient(String name, int kcal, int type) {
         this.name = name;
         this.kcal = kcal;
+        this.type = type;
     }
 
     public Ingredient() {
@@ -34,11 +36,20 @@ public class Ingredient {
         this.kcal = kcal;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Ingredient{" +
                 "name='" + name + '\'' +
                 ", kcal=" + kcal +
+                ", type=" + type +
                 '}';
     }
 
