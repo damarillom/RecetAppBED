@@ -5,12 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class RecipeList extends AppCompatActivity {
 
@@ -19,6 +21,11 @@ public class RecipeList extends AppCompatActivity {
 
     ArrayList<Recipe> arrayList = new ArrayList<>();
 
+    String diet = "";
+    String email, replacedEmail;
+    ArrayList<String> ingreUser, ingreRecipe;
+
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,25 +33,54 @@ public class RecipeList extends AppCompatActivity {
 
         listView = findViewById(R.id.listViewRecipeList);
 
+        mAuth = FirebaseAuth.getInstance();
+        email = mAuth.getCurrentUser().getEmail();
+        replacedEmail = email.replace("@", "\\").
+                replace(".", "-");
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        ValueEventListener valueEventListenerUser = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    Recipe recipe = ds.getValue(Recipe.class);
-//                    System.out.println("recipe = " + recipe);
-                    arrayList.add(recipe);
-                }
+                User user = dataSnapshot.getValue(User.class);
+                diet = user.getDiet();
 
-//                System.out.println("arrayList Recipes****************************= " + arrayList);
-                adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
-                listView.setAdapter(adapter);
+                ingreUser = user.getIngredients();
+
+                ValueEventListener valueEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()){
+                            Recipe recipe = ds.getValue(Recipe.class);
+                            ingreRecipe = recipe.getIngredients();
+                            if (Collections.disjoint(ingreUser, ingreRecipe)) {
+                                if (diet.equals("Omniv")) {
+                                        arrayList.add(recipe);
+                                } else if (diet.equals("Vegetarian")) {
+                                    if (!recipe.getType().equals("Omniv")) {
+                                            arrayList.add(recipe);
+                                    }
+                                } else if (diet.equals("Vegan")) {
+                                    if (recipe.getType().equals("Vegan")) {
+                                        arrayList.add(recipe);
+                                    }
+                                }
+                            }
+                        }
+                        adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
+                        listView.setAdapter(adapter);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        System.out.println("error" + databaseError.getMessage());
+                    }
+                };
+                FirebaseDatabase.getInstance().getReference("Recipes/").addValueEventListener(valueEventListener);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 System.out.println("error" + databaseError.getMessage());
             }
         };
-        FirebaseDatabase.getInstance().getReference("Recipes/").addValueEventListener(valueEventListener);
+        FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).addValueEventListener(valueEventListenerUser);
     }
 }
