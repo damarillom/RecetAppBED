@@ -52,6 +52,11 @@ public class RecipeList extends AppCompatActivity {
                         for (DataSnapshot ds : dataSnapshot.getChildren()){
                             Recipe recipe = ds.getValue(Recipe.class);
                             ingreRecipe = recipe.getIngredients();
+
+                            // Si la lista de ingredientes del usuario esta vacia,
+                            // inicializamos ingreUser como una nueva ArrayLista para que no de null
+                            if (ingreUser == null) ingreUser = new ArrayList<>();
+
                             if (Collections.disjoint(ingreUser, ingreRecipe)) {
                                 if (diet.equals("Omniv")) {
                                         arrayList.add(recipe);

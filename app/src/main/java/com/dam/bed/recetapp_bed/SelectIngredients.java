@@ -82,8 +82,10 @@ public class SelectIngredients extends AppCompatActivity {
         userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
         final DatabaseReference userListener = database.getReference("users/" + replacedEmail);
 
+        // Cambiar el titulo de la toolbar
+        getSupportActionBar().setTitle(R.string.excludeIngredients);
+
         //View elements
-//        mSearchView = findViewById(R.id.action_search);
         mListView = findViewById(R.id.listView);
         mListView2 = findViewById(R.id.listView2);
         accept = findViewById(R.id.acceptIngredients);
@@ -126,13 +128,14 @@ public class SelectIngredients extends AppCompatActivity {
 
                             // FILTRAR INGREDIENTES POR EL TIPO DE DIETA DEL USUARIO
                             if (diet.equalsIgnoreCase("Omniv")) {
+                                //
                                 if (!ingredientsNo.contains(ingredient.getName())) {
                                     ingredients.add(ingredient.getName());
                                 }
                             }
                             else if (diet.equalsIgnoreCase("Vegetarian")) {
-                                if (ingredient.getType() == VEGAN ||
-                                        ingredient.getType() == VEGETARIAN) {     // Coge el 1 y el 2
+                                // Coge el 0 y el 1
+                                if (ingredient.getType() == VEGAN || ingredient.getType() == VEGETARIAN) {
 
                                     if (!ingredientsNo.contains(ingredient.getName())) {
                                         ingredients.add(ingredient.getName());
@@ -239,7 +242,6 @@ public class SelectIngredients extends AppCompatActivity {
             }
         });
 
-//        setupSearchView();
 
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,20 +275,6 @@ public class SelectIngredients extends AppCompatActivity {
         startActivity(new Intent(SelectIngredients.this, RecipeList.class));
     }
 
-
-//        private void setupSearchView() {
-//        mSearchView.setIconifiedByDefault(false);
-//        mSearchView.setOnQueryTextListener(this);
-////        mSearchView.setSubmitButtonEnabled(true);
-//        mSearchView.setQueryHint("Search ingredient");
-////        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-////            @Override
-////            public boolean onClose() {
-////                mSearchView.clearFocus();
-////                return true;
-////            }
-////        });
-//    }
 
 
     @Override
