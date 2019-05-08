@@ -211,7 +211,6 @@ public class Cuestionario extends AppCompatActivity {
                     Intent intent = new Intent(Cuestionario.this, MainActivity.class);
                     startActivity(intent);
 
-
                 }else{
                     System.out.println("Algún campo vacío!");
                 }

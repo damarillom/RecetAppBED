@@ -1,8 +1,11 @@
 package com.dam.bed.recetapp_bed;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,10 +57,10 @@ public class RecipeList extends AppCompatActivity {
                             ingreRecipe = recipe.getIngredients();
                             if (Collections.disjoint(ingreUser, ingreRecipe)) {
                                 if (diet.equals("Omniv")) {
-                                        arrayList.add(recipe);
+                                    arrayList.add(recipe);
                                 } else if (diet.equals("Vegetarian")) {
                                     if (!recipe.getType().equals("Omniv")) {
-                                            arrayList.add(recipe);
+                                        arrayList.add(recipe);
                                     }
                                 } else if (diet.equals("Vegan")) {
                                     if (recipe.getType().equals("Vegan")) {
@@ -83,4 +86,32 @@ public class RecipeList extends AppCompatActivity {
         };
         FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).addValueEventListener(valueEventListenerUser);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_recipe:
+                        startActivity(new Intent(getBaseContext(), RecipeList.class));
+                        break;
+
+                    case R.id.action_ingredient:
+                        startActivity(new Intent(getBaseContext(), SelectIngredients.class));
+                        break;
+
+                    case R.id.action_cuest:
+                        startActivity(new Intent(getBaseContext(), Cuestionario.class));
+                        break;
+                }
+                return true;
+            }
+        });
+    }
 }
+
