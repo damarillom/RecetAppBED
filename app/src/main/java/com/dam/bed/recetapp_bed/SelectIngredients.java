@@ -1,5 +1,6 @@
 package com.dam.bed.recetapp_bed;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -49,6 +50,8 @@ public class SelectIngredients extends AppCompatActivity {
 
     ArrayList<String> ingredients = new ArrayList<>();
     ArrayList<String> ingredientsNo = new ArrayList<>();
+    static ArrayAdapter<String> adapter;
+    static ArrayAdapter<String> adapter2;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Ingredients");
 
     private FirebaseAuth mAuth;
@@ -56,6 +59,12 @@ public class SelectIngredients extends AppCompatActivity {
 
     String email;
     String replacedEmail;
+
+    // Conseguir dieta usuario
+    // Filtrar ingredientes
+    // Omniv = 2
+    // Vegetarian = 1
+    // Vegan = 0
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +75,7 @@ public class SelectIngredients extends AppCompatActivity {
         email = mAuth.getCurrentUser().getEmail();
         replacedEmail = email.replace("@", "\\").
                 replace(".", "-");
-        DatabaseReference refUser = database.getReference("users/" + replacedEmail + "/ingredients");
+        DatabaseReference userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
 
         //View elements
 //        mSearchView = findViewById(R.id.action_search);
@@ -75,13 +84,13 @@ public class SelectIngredients extends AppCompatActivity {
         accept = findViewById(R.id.acceptIngredients);
 
         // Añadir los ingredientes a la lista
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_expandable_list_item_1,
                 ingredients);
 
         // Lista 2 - Ingredientes que se excluyen
-        final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
+        adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_expandable_list_item_1,
                 ingredientsNo);
 
@@ -93,11 +102,11 @@ public class SelectIngredients extends AppCompatActivity {
         mListView2.setAdapter(adapter2);
         mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
 
-        refUser.addValueEventListener(new ValueEventListener() {
+        userIngredients.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                System.out.println("Añadiento ingredients a lista 2");
+                System.out.println("Añadiendo ingredients a lista 2");
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String ingredient = ds.getValue(String.class);
                     ingredientsNo.add(ingredient);
@@ -117,7 +126,7 @@ public class SelectIngredients extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                System.out.println("Añadiento ingredients a lista 1");
+                System.out.println("Añadiendo ingredients a lista 1");
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Ingredient ingredient = ds.getValue(Ingredient.class);
@@ -148,6 +157,9 @@ public class SelectIngredients extends AppCompatActivity {
                 String item = (String) o;
 //                Snackbar.make(view, "Adding ingredient: "+item, Snackbar.LENGTH_SHORT).show();
 
+                // Que no haya duplicados
+                if (ingredientsNo.contains(item)) return;
+
                 // Añadir a la segunda lista
                 ingredientsNo.add(item);
                 Collections.sort(ingredientsNo);    // Ordernar lista 2
@@ -172,6 +184,8 @@ public class SelectIngredients extends AppCompatActivity {
                 String item = (String) o;
 //                Snackbar.make(view, "Removing ingredient: "+item, Snackbar.LENGTH_SHORT).show();
 
+                // Que no haya duplicados
+                if (ingredients.contains(item)) return;
 
                 ingredients.add(item);          // Añadir a la primera lista
                 Collections.sort(ingredients);  // Ordenar la lista
@@ -214,10 +228,12 @@ public class SelectIngredients extends AppCompatActivity {
                 updateChildren(ingredientsMap);
 
         Toast.makeText(this, R.string.added_ingredients, Toast.LENGTH_SHORT).show();
+
+        startActivity(new Intent(SelectIngredients.this, RecipeList.class));
     }
 
 
-    //    private void setupSearchView() {
+//        private void setupSearchView() {
 //        mSearchView.setIconifiedByDefault(false);
 //        mSearchView.setOnQueryTextListener(this);
 ////        mSearchView.setSubmitButtonEnabled(true);
@@ -239,12 +255,12 @@ public class SelectIngredients extends AppCompatActivity {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint(getText(R.string.searchingredient));
+//        searchView.setQueryHint(getText(R.string.searchingredient));
 //        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 //            @Override
 //            public boolean onQueryTextSubmit(String query) {
 //                //se oculta el EditText
-//                searchView.setQuery("", false);
+//                searchView.setQuery("", true);
 //                searchView.setIconified(true);
 //                return true;
 //            }
@@ -254,11 +270,14 @@ public class SelectIngredients extends AppCompatActivity {
 //                    mListView.clearTextFilter();
 //                } else {
 //                    mListView.setFilterText(newText);
-//                    System.out.println("Lista ingredients");
-//                    for (String ingredient : ingredients) {
-//                        System.out.println(ingredient);
-//                    }
 //                }
+//                return true;
+//            }
+//        });
+//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                searchView.clearFocus();
 //                return true;
 //            }
 //        });
