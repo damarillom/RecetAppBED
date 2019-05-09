@@ -243,6 +243,7 @@ public class SelectIngredients extends AppCompatActivity {
         });
 
 
+        // Click de aceptar
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
