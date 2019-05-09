@@ -3,6 +3,7 @@ package com.dam.bed.recetapp_bed;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
@@ -46,7 +47,7 @@ public class SelectIngredients extends AppCompatActivity {
 
 //    SearchView mSearchView;
     ListView mListView, mListView2;
-    Button accept;
+//    Button accept;
 
     ArrayList<String> ingredients = new ArrayList<>();
     ArrayList<String> ingredientsNo = new ArrayList<>();
@@ -88,7 +89,7 @@ public class SelectIngredients extends AppCompatActivity {
         //View elements
         mListView = findViewById(R.id.listView);
         mListView2 = findViewById(R.id.listView2);
-        accept = findViewById(R.id.acceptIngredients);
+//        accept = findViewById(R.id.acceptIngredients);
 
         // Añadir los ingredientes a la lista
         adapter = new ArrayAdapter<>(
@@ -243,15 +244,15 @@ public class SelectIngredients extends AppCompatActivity {
         });
 
 
-        // Click de aceptar
-        accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Lista de ingredientes que se excluyen");
-                HashSet<String> tmpLista = new HashSet<>(ingredientsNo);
-                saveIngredients(tmpLista);
-            }
-        });
+
+//        accept.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                System.out.println("Lista de ingredientes que se excluyen");
+//                saveIngredients(ingredientsNo);
+//            }
+//        });
+
 
     }
 
@@ -317,6 +318,39 @@ public class SelectIngredients extends AppCompatActivity {
 //            }
 //        });
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                System.out.println("Lista de ingredientes que se excluyen");
+                saveIngredients(ingredientsNo);
+
+                switch (menuItem.getItemId()) {
+                    case R.id.action_recipe:
+                        startActivity(new Intent(getBaseContext(), RecipeList.class));
+                        break;
+
+                    case R.id.action_ingredient:
+                        startActivity(new Intent(getBaseContext(), SelectIngredients.class));
+                        break;
+
+                    case R.id.action_cuest:
+                        startActivity(new Intent(getBaseContext(), Cuestionario.class));
+                        break;
+                }
+                return true;
+            }
+        });
     }
 }
 
