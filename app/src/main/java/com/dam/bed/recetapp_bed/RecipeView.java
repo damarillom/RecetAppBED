@@ -1,8 +1,10 @@
 package com.dam.bed.recetapp_bed;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ public class RecipeView extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title);
         ingredients = (TextView) findViewById(R.id.ingredients);
         description = (TextView) findViewById(R.id.description);
+
         String name = "Pollo con arroz";
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -46,7 +49,8 @@ public class RecipeView extends AppCompatActivity {
             }
 
         }
-        title.setText(name);
+        // Nombre de la receta en la toolbar
+        getSupportActionBar().setTitle(name);
         ingredientes = "Ingredientes:\n\n";
 
 
