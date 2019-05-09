@@ -287,6 +287,7 @@ public class SelectIngredients extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+        getMenuInflater().inflate(R.menu.main, menu);
         inflater.inflate(R.menu.ingredients_menu, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -351,6 +352,21 @@ public class SelectIngredients extends AppCompatActivity {
                 return true;
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.logout) {
+            mAuth.signOut();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 
