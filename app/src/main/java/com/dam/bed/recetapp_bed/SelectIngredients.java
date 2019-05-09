@@ -243,11 +243,13 @@ public class SelectIngredients extends AppCompatActivity {
         });
 
 
+        // Click de aceptar
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("Lista de ingredientes que se excluyen");
-                saveIngredients(ingredientsNo);
+                HashSet<String> tmpLista = new HashSet<>(ingredientsNo);
+                saveIngredients(tmpLista);
             }
         });
 
@@ -257,15 +259,19 @@ public class SelectIngredients extends AppCompatActivity {
      * Guarda en la base de datos los ingredients que el usuario no quiere
      * @param ingredients
      */
-    private void saveIngredients(ArrayList<String> ingredients) {
+    private void saveIngredients(HashSet<String> ingredients) {
 
+        System.out.println("Save ingredients");
         for (String s : ingredients) {
             System.out.println(s);
         }
 
+        System.out.println("Cantidad items " + adapter2.getCount());
 
+
+        ArrayList tmpLista = new ArrayList<>(ingredients);
         Map<String, Object> ingredientsMap = new HashMap<>();
-        ingredientsMap.put("ingredients", ingredients);
+        ingredientsMap.put("ingredients", tmpLista);
 
         FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                 updateChildren(ingredientsMap);
