@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/mas"
+        android:icon="@drawable/ic_expand_less_black_50dp"
+        android:title="@string/increase_size"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menos"
+        android:icon="@drawable/ic_expand_more_black_24dp"
+        android:title="@string/decrease_size"
+        app:showAsAction="always" />
+</menu>
