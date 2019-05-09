@@ -101,6 +101,8 @@ public class Cuestionario extends AppCompatActivity {
                     } else if (diet.equals("Vegan")) {
                         radioVegano.setChecked(true);
                     }
+                } else {
+                    System.out.println("1st time");
                 }
             }
 
@@ -118,10 +120,21 @@ public class Cuestionario extends AppCompatActivity {
         System.out.println("current user" + mAuth.getCurrentUser());
         //System.out.println("current user email" + mAuth.getCurrentUser().getEmail());
 
-        buttonOK = (Button) findViewById(R.id.acceptButton);
-        buttonOK.setOnClickListener(new View.OnClickListener() {
+//        buttonOK = (Button) findViewById(R.id.acceptButton);
+//        buttonOK.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+
+
+        //BottomNavigationView
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_cuest);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
-            public void onClick(View v) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
                 boolean check = true;
                 //comprobamos que los campos no estén vacíos
                 try {
@@ -208,7 +221,6 @@ public class Cuestionario extends AppCompatActivity {
 //                DatabaseReference ref = database.getReference("users/"+"amarilleitor96\\gmail-com");
 //                FirebaseDatabase.getInstance().getReference().getKey(ref);
 
-
                     //Go to main
                     Intent intent = new Intent(Cuestionario.this, MainActivity.class);
                     startActivity(intent);
@@ -216,17 +228,10 @@ public class Cuestionario extends AppCompatActivity {
                 }else{
                     System.out.println("Algún campo vacío!");
                 }
-            }
-        });
 
-        //BottomNavigationView
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
-                findViewById(R.id.navigation);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
+
                     case R.id.action_recipe:
                         startActivity(new Intent(getBaseContext(), RecipeList.class));
                         break;

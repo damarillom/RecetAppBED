@@ -97,6 +97,7 @@ public class RecipeList extends AppCompatActivity {
         super.onStart();
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_recipe);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
