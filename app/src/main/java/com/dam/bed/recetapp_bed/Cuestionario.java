@@ -218,32 +218,27 @@ public class Cuestionario extends AppCompatActivity {
                     FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                             updateChildren(datosActualizar);
 
-//                DatabaseReference ref = database.getReference("users/"+"amarilleitor96\\gmail-com");
-//                FirebaseDatabase.getInstance().getReference().getKey(ref);
+                    switch (menuItem.getItemId()) {
 
-                    //Go to main
-                    Intent intent = new Intent(Cuestionario.this, MainActivity.class);
-                    startActivity(intent);
+                        case R.id.action_recipe:
+                            startActivity(new Intent(getBaseContext(), RecipeList.class));
+                            break;
 
-                }else{
-                    System.out.println("Algún campo vacío!");
+                        case R.id.action_ingredient:
+                            startActivity(new Intent(getBaseContext(), SelectIngredients.class));
+                            break;
+
+                        case R.id.action_cuest:
+                            startActivity(new Intent(getBaseContext(), Cuestionario.class));
+                            break;
+
+                    }
+                    // si hay campos vacíos
+                } else {
+                    Toast.makeText(getBaseContext(), "Answer the form, please", Toast.LENGTH_SHORT).show();
+
                 }
 
-
-                switch (menuItem.getItemId()) {
-
-                    case R.id.action_recipe:
-                        startActivity(new Intent(getBaseContext(), RecipeList.class));
-                        break;
-
-                    case R.id.action_ingredient:
-                        startActivity(new Intent(getBaseContext(), SelectIngredients.class));
-                        break;
-
-                    case R.id.action_cuest:
-                        startActivity(new Intent(getBaseContext(), Cuestionario.class));
-                        break;
-                }
                 return true;
             }
         });
