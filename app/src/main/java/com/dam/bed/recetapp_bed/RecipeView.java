@@ -3,11 +3,15 @@ package com.dam.bed.recetapp_bed;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -27,6 +31,11 @@ public class RecipeView extends AppCompatActivity {
     static TextView title, ingredients, description;
     static ImageView image;
     final long ONE_MEGABYTE = 1024 * 1024;
+    private int textSize = 16;
+
+    // Limites del size de las letras
+    private final int MAX_TEXT_SIZE = 22;
+    private final int MIN_TEXT_SIZE = 14;
 
     static String img = "";
 
@@ -96,7 +105,51 @@ public class RecipeView extends AppCompatActivity {
         };
         FirebaseDatabase.getInstance().getReference("Recipes/" + name).addValueEventListener(valueEventListener);
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.letter_size, menu);
 
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.mas:
+
+                changeTextSize(2);
+                return true;
+
+            case R.id.menos:
+
+                changeTextSize(-2);
+                return true;
+
+                default:
+                    return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    /**
+     * Cambiar el size del texto de la receta
+     * @param num
+     * @return
+     */
+    private boolean changeTextSize(int num) {
+
+        // Limites de size de las letras
+        if (num > 0 && textSize == MAX_TEXT_SIZE) return false;
+        if (num < 0 && textSize == MIN_TEXT_SIZE) return false;
+
+        textSize += num;
+        ingredients.setTextSize(textSize);
+        description.setTextSize(textSize);
+        System.out.println("Text size: " + textSize);
+        return true;
     }
 }
