@@ -333,7 +333,7 @@ public class SelectIngredients extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 System.out.println("Lista de ingredientes que se excluyen");
-                saveIngredients(ingredientsNo);
+                saveIngredients(new HashSet<String>(ingredientsNo));
 
                 switch (menuItem.getItemId()) {
                     case R.id.action_recipe:
