@@ -2,8 +2,10 @@ package com.dam.bed.recetapp_bed;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -99,6 +101,8 @@ public class Cuestionario extends AppCompatActivity {
                     } else if (diet.equals("Vegan")) {
                         radioVegano.setChecked(true);
                     }
+                } else {
+                    System.out.println("1st time");
                 }
             }
 
@@ -116,10 +120,21 @@ public class Cuestionario extends AppCompatActivity {
         System.out.println("current user" + mAuth.getCurrentUser());
         //System.out.println("current user email" + mAuth.getCurrentUser().getEmail());
 
-        buttonOK = (Button) findViewById(R.id.acceptButton);
-        buttonOK.setOnClickListener(new View.OnClickListener() {
+//        buttonOK = (Button) findViewById(R.id.acceptButton);
+//        buttonOK.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+
+
+        //BottomNavigationView
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_cuest);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
-            public void onClick(View v) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
                 boolean check = true;
                 //comprobamos que los campos no estén vacíos
                 try {
@@ -203,17 +218,28 @@ public class Cuestionario extends AppCompatActivity {
                     FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                             updateChildren(datosActualizar);
 
-//                DatabaseReference ref = database.getReference("users/"+"amarilleitor96\\gmail-com");
-//                FirebaseDatabase.getInstance().getReference().getKey(ref);
+                    switch (menuItem.getItemId()) {
 
+                        case R.id.action_recipe:
+                            startActivity(new Intent(getBaseContext(), RecipeList.class));
+                            break;
 
-                    //Go to main
-                    Intent intent = new Intent(Cuestionario.this, MainActivity.class);
-                    startActivity(intent);
+                        case R.id.action_ingredient:
+                            startActivity(new Intent(getBaseContext(), SelectIngredients.class));
+                            break;
 
-                }else{
-                    System.out.println("Algún campo vacío!");
+                        case R.id.action_cuest:
+                            startActivity(new Intent(getBaseContext(), Cuestionario.class));
+                            break;
+
+                    }
+                    // si hay campos vacíos
+                } else {
+                    Toast.makeText(getBaseContext(), "Answer the form, please", Toast.LENGTH_SHORT).show();
+
                 }
+
+                return true;
             }
         });
     }

@@ -43,5 +43,7 @@
     <string name="excludeIngredients">Ingredients to exclude</string>
     <string name="increase_size">Increase text size</string>
     <string name="decrease_size">Decrease text size</string>
+    <string name="logout">Logout</string>
+
 
 </resources>
