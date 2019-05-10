@@ -75,18 +75,19 @@ public class Recipe {
                 '}';
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Recipe recipe = (Recipe) o;
-        return Objects.equals(name, recipe.name);
+
+        return name != null ? name.equals(recipe.name) : recipe.name == null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return name != null ? name.hashCode() : 0;
     }
 }
