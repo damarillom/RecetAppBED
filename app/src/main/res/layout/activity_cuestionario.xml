@@ -1,145 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
     tools:context=".Cuestionario">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="25dp">
+        android:layout_marginBottom="56dp">
 
-        <TextView
-            android:id="@+id/genderLabel"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/gender" />
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="25dp">
 
-        <RadioGroup
-            android:id="@+id/radiogroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-
-            <RadioButton
-                android:id="@+id/radioMale"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/genderLabel"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/male" />
+                android:text="@string/gender" />
 
-            <RadioButton
-                android:id="@+id/radioFemale"
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/female" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radioOther"
-                android:layout_width="wrap_content"
+
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/male" />
+
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/female" />
+
+                <RadioButton
+                    android:id="@+id/radioOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/other" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/heightLabel"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/other" />
+                android:layout_marginTop="25dp"
+                android:text="@string/height" />
 
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/heightLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="@string/height" />
-
-        <EditText
-            android:id="@+id/height"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="3" />
-
-        <TextView
-            android:id="@+id/weightLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/weight" />
-
-        <EditText
-            android:id="@+id/weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="3" />
-
-        <TextView
-            android:id="@+id/birthLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/yearofbirth" />
-
-        <EditText
-            android:id="@+id/year"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="4" />
-
-        <TextView
-            android:id="@+id/dietLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/typeofdiet" />
-
-        <RadioGroup
-            android:id="@+id/radiogroupDiet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioOmnivore"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/height"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/omnivore" />
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLength="3" />
 
-            <RadioButton
-                android:id="@+id/radioVegetarian"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/weightLabel"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/vegetarian" />
+                android:layout_marginTop="20dp"
+                android:text="@string/weight" />
 
-            <RadioButton
-                android:id="@+id/radioVegan"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/weight"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/vegan" />
-        </RadioGroup>
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLength="3" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/birthLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/yearofbirth" />
+
+            <EditText
+                android:id="@+id/year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLength="4" />
+
+            <TextView
+                android:id="@+id/dietLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/typeofdiet" />
+
+            <RadioGroup
+                android:id="@+id/radiogroupDiet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioOmnivore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/omnivore" />
+
+                <RadioButton
+                    android:id="@+id/radioVegetarian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vegetarian" />
+
+                <RadioButton
+                    android:id="@+id/radioVegan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vegan" />
+            </RadioGroup>
+
+        </LinearLayout>
+    </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:forceHasOverlappingRendering="true">
 
         <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -149,4 +156,4 @@
             android:layout_gravity="bottom"
             app:menu="@menu/my_navigation_items" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
