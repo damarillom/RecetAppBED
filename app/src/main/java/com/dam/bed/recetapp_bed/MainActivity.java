@@ -100,15 +100,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
-
-
-
-
-
-
-
-
-
         try {
             listView = findViewById(R.id.listViewRecipeList);
 
@@ -173,22 +164,7 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             System.out.println("************Error");
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+   }
 
 
 
