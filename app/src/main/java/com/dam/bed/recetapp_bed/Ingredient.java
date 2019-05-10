@@ -53,19 +53,18 @@ public class Ingredient {
                 '}';
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Ingredient that = (Ingredient) o;
-        return Objects.equals(name, that.name);
+
+        return name != null ? name.equals(that.name) : that.name == null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-
-        return Objects.hash(name);
+        return name != null ? name.hashCode() : 0;
     }
 }
