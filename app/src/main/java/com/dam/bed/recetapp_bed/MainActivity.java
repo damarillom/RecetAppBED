@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.action_recipe:
-                        startActivity(new Intent(getBaseContext(), RecipeList.class));
+                        startActivity(new Intent(getBaseContext(), MainActivity.class));
                         break;
 
                     case R.id.action_ingredient:
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.recipes) {
-            startActivity(new Intent(MainActivity.this, RecipeList.class));
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
         } else if (id == R.id.ingredients) {
             startActivity(new Intent(MainActivity.this, SelectIngredients.class));
         } else if (id == R.id.cuest) {

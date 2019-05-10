@@ -1,6 +1,6 @@
 package com.dam.bed.recetapp_bed;
 
-import android.content.Intent;
+/**import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -143,5 +143,5 @@ public class RecipeList extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-}
+}*/
 

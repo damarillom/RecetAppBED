@@ -279,7 +279,7 @@ public class SelectIngredients extends AppCompatActivity {
 
         Toast.makeText(this, R.string.added_ingredients, Toast.LENGTH_SHORT).show();
 
-        startActivity(new Intent(SelectIngredients.this, RecipeList.class));
+        startActivity(new Intent(SelectIngredients.this, MainActivity.class));
     }
 
 
@@ -338,7 +338,7 @@ public class SelectIngredients extends AppCompatActivity {
 
                 switch (menuItem.getItemId()) {
                     case R.id.action_recipe:
-                        startActivity(new Intent(getBaseContext(), RecipeList.class));
+                        startActivity(new Intent(getBaseContext(), MainActivity.class));
                         break;
 
                     case R.id.action_ingredient:
