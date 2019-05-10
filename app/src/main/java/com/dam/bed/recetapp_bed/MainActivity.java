@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity
 
             mAuth = FirebaseAuth.getInstance();
             email = mAuth.getCurrentUser().getEmail();
-            replacedEmail = email.replace("@", "\\").
-                    replace(".", "-");
+            //replacedEmail = email.replace("@", "\\").replace(".", "-");
+            replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
 
             ValueEventListener valueEventListenerUser = new ValueEventListener() {
                 @Override

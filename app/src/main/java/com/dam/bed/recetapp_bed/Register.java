@@ -90,9 +90,11 @@ public class Register extends AppCompatActivity {
                                     System.out.println("email:" + firebaseUser.getEmail());
                                     System.out.println("display:" + firebaseUser.getDisplayName());
 
-                                    FirebaseDatabase.getInstance().getReference("users").
-                                            child(email.replace("@","\\").replace(".","-")).setValue(new User(email));
+                                    //FirebaseDatabase.getInstance().getReference("users").
+                                    //        child(email.replace("@","\\").replace(".","-")).setValue(new User(email));
 
+                                    FirebaseDatabase.getInstance().getReference("users").
+                                            child(SingletonRecetApp.getInstance().replaceEmail(email)).setValue(new User(email));
                                     /**Toast.makeText(Register.this, "User created!"
                                             + "UID:" +firebaseUser.getUid() +"Email:" +
                                             firebaseUser.getEmail(), Toast.LENGTH_LONG).show();*/
