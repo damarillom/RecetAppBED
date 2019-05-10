@@ -293,7 +293,7 @@ public class SelectIngredients extends AppCompatActivity {
 
                 switch (menuItem.getItemId()) {
                     case R.id.action_recipe:
-                        startActivity(new Intent(getBaseContext(), RecipeList.class));
+                        startActivity(new Intent(getBaseContext(), MainActivity.class));
                         break;
 
                     case R.id.action_ingredient:

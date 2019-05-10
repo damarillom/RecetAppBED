@@ -1,6 +1,6 @@
 package com.dam.bed.recetapp_bed;
 
-import android.content.Intent;
+/**import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -51,16 +51,16 @@ public class RecipeList extends AppCompatActivity {
 
                 ingreUser = user.getIngredients();
 
+                // Si la lista de ingredientes del usuario esta vacia,
+                // inicializamos ingreUser como una nueva ArrayLista para que no de null
+                if (ingreUser == null) ingreUser = new ArrayList<>();
+
                 ValueEventListener valueEventListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot ds : dataSnapshot.getChildren()){
                             Recipe recipe = ds.getValue(Recipe.class);
                             ingreRecipe = recipe.getIngredients();
-
-                            // Si la lista de ingredientes del usuario esta vacia,
-                            // inicializamos ingreUser como una nueva ArrayLista para que no de null
-                            if (ingreUser == null) ingreUser = new ArrayList<>();
 
                             if (Collections.disjoint(ingreUser, ingreRecipe)) {
                                 if (diet.equals("Omniv")) {
@@ -76,6 +76,7 @@ public class RecipeList extends AppCompatActivity {
                                 }
                             }
                         }
+                        System.out.println("Size array: " + arrayList.size());
                         adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
                         listView.setAdapter(adapter);
                     }
@@ -143,5 +144,5 @@ public class RecipeList extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-}
+}*/
 
