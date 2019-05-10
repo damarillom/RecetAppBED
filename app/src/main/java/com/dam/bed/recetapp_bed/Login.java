@@ -139,7 +139,9 @@ public class Login extends AppCompatActivity {
                                             System.out.println("databaseError = " + databaseError);
                                         }
                                     };
-                                    String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+                                    //String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+                                    String replace = SingletonRecetApp.getInstance().replaceEmail(mAuth.getCurrentUser().getEmail());
+
                                     FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
 
 
@@ -176,7 +178,9 @@ public class Login extends AppCompatActivity {
                             System.out.println("databaseError = " + databaseError);
                         }
                     };
-                    String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+                    //String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+                    String replace = SingletonRecetApp.getInstance().replaceEmail(mAuth.getCurrentUser().getEmail());
+
                     FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
                     //startActivity(new Intent(Login.this, MainActivity.class));
                 }
@@ -209,7 +213,8 @@ public class Login extends AppCompatActivity {
 
 
                 final String email = account.getEmail();
-                final String replace = email.replace("@","\\").replace(".","-");
+                //final String replace = email.replace("@","\\").replace(".","-");
+                final String replace = SingletonRecetApp.getInstance().replaceEmail(email);
 
                 final Query query = FirebaseDatabase.getInstance().getReference("users").orderByKey().equalTo(replace);
 

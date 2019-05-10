@@ -123,7 +123,8 @@ public class Cuestionario extends AppCompatActivity {
                 System.out.println("databaseError = " + databaseError);
             }
         };
-        String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+        //String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+        String replace = SingletonRecetApp.getInstance().replaceEmail(mAuth.getCurrentUser().getEmail());
         FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
 
 

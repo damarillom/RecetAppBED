@@ -78,8 +78,8 @@ public class SelectIngredients extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         email = mAuth.getCurrentUser().getEmail();
-        replacedEmail = email.replace("@", "\\").
-                replace(".", "-");
+        //replacedEmail = email.replace("@", "\\").replace(".", "-");
+        replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
         userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
         final DatabaseReference userListener = database.getReference("users/" + replacedEmail);
 
