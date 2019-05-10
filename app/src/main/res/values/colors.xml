@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorLink">#2200ff</color>
+    <color name="ingredientsOK">#99ff99</color>
+    <color name="ingredientsNO">#ff5050</color>
 </resources>

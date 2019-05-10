@@ -3,6 +3,7 @@ package com.dam.bed.recetapp_bed;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -45,14 +47,13 @@ import static com.dam.bed.recetapp_bed.R.string.searchingredient;
 
 public class SelectIngredients extends AppCompatActivity {
 
-//    SearchView mSearchView;
-    ListView mListView, mListView2;
-//    Button accept;
+    //    SearchView mSearchView;
+    ListView mListView;
 
     ArrayList<String> ingredients = new ArrayList<>();
     ArrayList<String> ingredientsNo = new ArrayList<>();
     static ArrayAdapter<String> adapter;
-    static ArrayAdapter<String> adapter2;
+
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Ingredients");
     DatabaseReference userIngredients;
 
@@ -61,7 +62,7 @@ public class SelectIngredients extends AppCompatActivity {
 
     String email, replacedEmail;
     String diet = "";
-    final int OMNIV = 2;
+    final int OMNIV = 2; //TODO pq no se usa?
     final int VEGETARIAN = 1;
     final int VEGAN = 0;
 
@@ -78,37 +79,44 @@ public class SelectIngredients extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         email = mAuth.getCurrentUser().getEmail();
-        //replacedEmail = email.replace("@", "\\").replace(".", "-");
         replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
         userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
         final DatabaseReference userListener = database.getReference("users/" + replacedEmail);
 
-        // Cambiar el titulo de la toolbar
+        // Cambiar el titulo de la toolbar, mejor en onStart o más abajo
         getSupportActionBar().setTitle(R.string.excludeIngredients);
 
         //View elements
         mListView = findViewById(R.id.listView);
-        mListView2 = findViewById(R.id.listView2);
-//        accept = findViewById(R.id.acceptIngredients);
 
         // Añadir los ingredientes a la lista
-        adapter = new ArrayAdapter<>(
+        adapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_expandable_list_item_1,
-                ingredients);
+                ingredients){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View row = super.getView(position, convertView, parent);
+                if(ingredientsNo.contains(getItem(position)))
+                {
+                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsNO));
+                }
+                else
+                {
+                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsOK));
+                }
+                return row;
+            }
+        };
 
-        // Lista 2 - Ingredientes que se excluyen
-        adapter2 = new ArrayAdapter<>(this,
-                android.R.layout.simple_expandable_list_item_1,
-                ingredientsNo);
 
         mListView.setAdapter(adapter);
-        mListView.setBackgroundColor(Color.parseColor("#99ff99"));
+        //tot en verde por defecto
+        mListView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark)); // background = lineas de separacion
         mListView.setTextFilterEnabled(true);
         mListView.setItemsCanFocus(true);
 
-        mListView2.setAdapter(adapter2);
-        mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
 
         userListener.addValueEventListener(new ValueEventListener() {
             @Override
@@ -129,31 +137,20 @@ public class SelectIngredients extends AppCompatActivity {
 
                             // FILTRAR INGREDIENTES POR EL TIPO DE DIETA DEL USUARIO
                             if (diet.equalsIgnoreCase("Omniv")) {
-                                //
-                                if (!ingredientsNo.contains(ingredient.getName())) {
-                                    ingredients.add(ingredient.getName());
-                                }
+                                ingredients.add(ingredient.getName());
                             }
                             else if (diet.equalsIgnoreCase("Vegetarian")) {
                                 // Coge el 0 y el 1
                                 if (ingredient.getType() == VEGAN || ingredient.getType() == VEGETARIAN) {
-
-                                    if (!ingredientsNo.contains(ingredient.getName())) {
-                                        ingredients.add(ingredient.getName());
-                                    }
+                                    ingredients.add(ingredient.getName());
                                 }
                             }
                             else if (diet.equalsIgnoreCase("Vegan")) {
                                 if (ingredient.getType() == VEGAN) {    // Coge el 0
-
-                                    if (!ingredientsNo.contains(ingredient.getName())) {
-                                        ingredients.add(ingredient.getName());
-                                    }
+                                    ingredients.add(ingredient.getName());
                                 }
                             }
-
                             System.out.println("ingredient - " + ingredient);
-
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -181,7 +178,6 @@ public class SelectIngredients extends AppCompatActivity {
                     ingredientsNo.add(ingredient);
                     System.out.println("ingredient - " + ingredient);
                 }
-                adapter2.notifyDataSetChanged();
             }
 
             @Override
@@ -191,8 +187,6 @@ public class SelectIngredients extends AppCompatActivity {
         });
 
 
-
-
         //Onclick de la lista principal
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -200,60 +194,24 @@ public class SelectIngredients extends AppCompatActivity {
                 Object o = mListView.getItemAtPosition(position);
                 System.out.println("position - " + position);
                 String item = (String) o;
-//                Snackbar.make(view, "Adding ingredient: "+item, Snackbar.LENGTH_SHORT).show();
 
                 // Que no haya duplicados
-                if (ingredientsNo.contains(item)) return;
+                if (ingredientsNo.contains(item)) {
+                    ingredientsNo.remove(item);
+                    adapter.notifyDataSetChanged();
+
+                    return;
+                }
 
                 // Añadir a la segunda lista
                 ingredientsNo.add(item);
                 Collections.sort(ingredientsNo);    // Ordernar lista 2
                 System.out.println("adding ingredient " + item + " a lista 2");
-                adapter2.notifyDataSetChanged();
 
-                // Eliminar de la lista principal
-//                adapter.remove(item);
-                ingredients.remove(item);
                 adapter.notifyDataSetChanged();
 
-//                mSearchView.clearFocus();
-//                mListView.clearTextFilter();
             }
         });
-
-        // Onclick segunda lista
-        mListView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object o = mListView2.getItemAtPosition(position);
-                String item = (String) o;
-//                Snackbar.make(view, "Removing ingredient: "+item, Snackbar.LENGTH_SHORT).show();
-
-                // Que no haya duplicados
-                if (ingredients.contains(item)) return;
-
-                ingredients.add(item);          // Añadir a la primera lista
-                Collections.sort(ingredients);  // Ordenar la lista
-                System.out.println("adding ingredient " + item + " a lista 1");
-                adapter.notifyDataSetChanged();
-
-                // Eliminar de la lista secundaria
-                ingredientsNo.remove(item);
-                adapter2.notifyDataSetChanged();
-            }
-        });
-
-
-
-//        accept.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                System.out.println("Lista de ingredientes que se excluyen");
-//                saveIngredients(ingredientsNo);
-//            }
-//        });
-
-
     }
 
     /**
@@ -267,9 +225,6 @@ public class SelectIngredients extends AppCompatActivity {
             System.out.println(s);
         }
 
-        System.out.println("Cantidad items " + adapter2.getCount());
-
-
         ArrayList tmpLista = new ArrayList<>(ingredients);
         Map<String, Object> ingredientsMap = new HashMap<>();
         ingredientsMap.put("ingredients", tmpLista);
@@ -279,7 +234,7 @@ public class SelectIngredients extends AppCompatActivity {
 
         Toast.makeText(this, R.string.added_ingredients, Toast.LENGTH_SHORT).show();
 
-        startActivity(new Intent(SelectIngredients.this, RecipeList.class));
+//        startActivity(new Intent(SelectIngredients.this, RecipeList.class));
     }
 
 
