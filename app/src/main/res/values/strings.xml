@@ -45,6 +45,7 @@
     <string name="decrease_size">Decrease text size</string>
     <string name="logout">Logout</string>
     <string name="recipelist">Recipes List</string>
+    <string name="norecipes">No recipes found</string>
 
 
 </resources>

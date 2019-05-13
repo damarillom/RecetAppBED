@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listView;
     ListViewAdapterRecipe adapter;
+    TextView noRecipesFound;
 
     ArrayList<Recipe> arrayList = new ArrayList<>();
 
@@ -44,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListner);
 
+//        // TODO mostrar al usuario que no se ha encontrado ninguna receta
+//        System.out.println("Arraylist size: " + arrayList.size());
+//        if (arrayList.size() == 0) {
+//            listView.setVisibility(View.GONE);
+//            noRecipes.setVisibility(View.VISIBLE);
+//        } else {
+//            noRecipes.setVisibility(View.GONE);
+//            listView.setVisibility(View.VISIBLE);
+//        }
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
@@ -91,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         };
         try {
             listView = findViewById(R.id.listViewRecipeList);
+            noRecipesFound = findViewById(R.id.noRecipes);
 
             mAuth = FirebaseAuth.getInstance();
             email = mAuth.getCurrentUser().getEmail();
@@ -129,6 +141,17 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
+                            }
+                            // TODO mostrar al usuario que no se ha encontrado ninguna receta
+                            System.out.println("Arraylist size: " + arrayList.size());
+                            if (arrayList.size() == 0) {
+//                                listView.setVisibility(View.GONE);
+                                noRecipesFound.setVisibility(View.VISIBLE);
+                                System.out.println("Text no recipes: " + noRecipesFound.getText());
+                            }
+                            else {
+                                noRecipesFound.setVisibility(View.GONE);
+                                listView.setVisibility(View.VISIBLE);
                             }
                             adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
                             listView.setAdapter(adapter);
