@@ -26,7 +26,7 @@
         <activity android:name=".Cuestionario" />
         <activity android:name=".ForgotPass" />
         <activity android:name=".RecipeView"></activity>
-        <activity android:name=".RecipeList"></activity>
+        <!--<activity android:name=".RecipeList"></activity>-->
         <activity android:name=".SelectIngredients"
             android:windowSoftInputMode="adjustPan"></activity>
     </application>
