@@ -10,13 +10,26 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/noRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center"
+            android:text="@string/norecipes"
+            android:textSize="40sp"
+            android:visibility="visible" />
+
         <ListView
             android:id="@+id/listViewRecipeList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
             android:layout_marginTop="56dp"
-            android:layout_marginBottom="60dp">
+            android:visibility="gone">
             <!--pa dejar un espacio pa la botnavview-->
 
         </ListView>
@@ -25,7 +38,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:forceHasOverlappingRendering="true">
+        android:forceHasOverlappingRendering="true"
+        android:orientation="horizontal">
 
         <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"

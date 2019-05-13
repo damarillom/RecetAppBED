@@ -44,7 +44,9 @@
     <string name="increase_size">Increase text size</string>
     <string name="decrease_size">Decrease text size</string>
     <string name="logout">Logout</string>
+    <string name="norecipes">No recipes found</string>
     <string name="recipelist">List of Recipes</string>
+
 
 
 </resources>
