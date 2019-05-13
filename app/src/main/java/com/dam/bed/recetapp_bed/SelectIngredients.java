@@ -62,7 +62,7 @@ public class SelectIngredients extends AppCompatActivity {
 
     String email, replacedEmail;
     String diet = "";
-    final int OMNIV = 2; //TODO pq no se usa?
+//    final int OMNIV = 2;
     final int VEGETARIAN = 1;
     final int VEGAN = 0;
 
@@ -247,32 +247,32 @@ public class SelectIngredients extends AppCompatActivity {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
-//        searchView.setQueryHint(getText(R.string.searchingredient));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                //se oculta el EditText
-//                searchView.setQuery("", true);
-//                searchView.setIconified(true);
-//                return true;
-//            }
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (TextUtils.isEmpty(newText)) {
-//                    mListView.clearTextFilter();
-//                } else {
-//                    mListView.setFilterText(newText);
-//                }
-//                return true;
-//            }
-//        });
-//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//                searchView.clearFocus();
-//                return true;
-//            }
-//        });
+        searchView.setQueryHint(getText(R.string.searchingredient));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //se oculta el EditText
+                searchView.setQuery("", true);
+                searchView.setIconified(true);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)) {
+                    mListView.clearTextFilter();
+                } else {
+                    mListView.setFilterText(newText);
+                }
+                return true;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                searchView.clearFocus();
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -322,6 +322,13 @@ public class SelectIngredients extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+        saveIngredients(new HashSet<String>(ingredientsNo));
     }
 }
 
