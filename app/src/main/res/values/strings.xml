@@ -17,7 +17,7 @@
     <string name="email_id">\tEmail</string>
     <string name="password">\tPassword</string>
     <string name="repassword">\tRepeat password</string>
-    <string name="login">login</string>
+    <string name="login">Login</string>
     <string name="create_a_new_account">Create a new account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="send">Send email</string>
@@ -38,14 +38,15 @@
     <string name="passempty">Password is empty</string>
     <string name="passnotmatch">Passwords do not match</string>
     <string name="authfail">Authentication failed.</string>
-    <string name="searchingredient">Search ingredient...</string>
+    <string name="searchingredient">Search ingredient…</string>
     <string name="added_ingredients">Ingredients saved</string>
     <string name="excludeIngredients">Ingredients to exclude</string>
     <string name="increase_size">Increase text size</string>
     <string name="decrease_size">Decrease text size</string>
     <string name="logout">Logout</string>
-    <string name="recipelist">Recipes List</string>
     <string name="norecipes">No recipes found</string>
+    <string name="recipelist">List of Recipes</string>
+
 
 
 </resources>
