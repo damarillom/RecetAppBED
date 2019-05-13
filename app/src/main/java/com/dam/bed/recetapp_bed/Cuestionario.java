@@ -2,8 +2,11 @@ package com.dam.bed.recetapp_bed;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,12 +25,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cuestionario extends AppCompatActivity {
-    Button buttonOK;
     EditText editTextHeight;
     EditText editTextWeight;
     EditText editTextYear;
-    double userHeight;
-    double userWeight;
+    int userHeight;
+    int userWeight;
     int userYear;
 
     RadioGroup radioGender;
@@ -38,8 +40,6 @@ public class Cuestionario extends AppCompatActivity {
 
     //firebaseauth
     private FirebaseAuth mAuth;
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("recetappbed");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,33 +72,49 @@ public class Cuestionario extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                //System.out.println("*********"+user.getAltura());
                 if (user.isQuest()) {
-                    editTextHeight.setText(Double.toString(user.getAltura()));
-                    editTextWeight.setText(Double.toString(user.getPeso()));
+                    editTextHeight.setText(Integer.toString(user.getAltura()));
+                    editTextWeight.setText(Integer.toString(user.getPeso()));
                     editTextYear.setText(Integer.toString(user.getBirthday()));
+
                     String gender = user.getGender();
                     String diet = user.getDiet();
+
                     RadioButton radioM = (RadioButton) findViewById(R.id.radioMale);
                     RadioButton radioF = (RadioButton) findViewById(R.id.radioFemale);
                     RadioButton radioO = (RadioButton) findViewById(R.id.radioOther);
+
                     RadioButton radioVegano = (RadioButton) findViewById(R.id.radioVegan);
                     RadioButton radioVegetarian = (RadioButton) findViewById(R.id.radioVegetarian);
                     RadioButton radioOmnivore = (RadioButton) findViewById(R.id.radioOmnivore);
-                    if (gender.equals("M")) {
-                        radioM.setChecked(true);
-                    } else if (gender.equals("F")) {
-                        radioF.setChecked(true);
-                    } else if (gender.equals("O")) {
-                        radioO.setChecked(true);
+
+                    switch (gender) {
+                        case "M":
+                            radioM.setChecked(true);
+                            break;
+                        case "F":
+                            radioF.setChecked(true);
+                            break;
+                        case "O":
+                            radioO.setChecked(true);
+                            break;
                     }
-                    if (diet.equals("Omniv")) {
-                        radioOmnivore.setChecked(true);
-                    } else if (diet.equals("Vegetarian")) {
-                        radioVegetarian.setChecked(true);
-                    } else if (diet.equals("Vegan")) {
-                        radioVegano.setChecked(true);
+
+                    switch (diet) {
+                        case "Omniv":
+                            radioOmnivore.setChecked(true);
+                            break;
+                        case "Vegetarian":
+                            radioVegetarian.setChecked(true);
+                            break;
+                        case "Vegan":
+                            radioVegano.setChecked(true);
+                            break;
                     }
+                }
+                else {
+                    System.out.println("1st time");
+                    Toast.makeText(Cuestionario.this, "Please, answer the form", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -107,29 +123,33 @@ public class Cuestionario extends AppCompatActivity {
                 System.out.println("databaseError = " + databaseError);
             }
         };
-        String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+        //String replace = mAuth.getCurrentUser().getEmail().replace("@", "\\").replace(".", "-");
+        String replace = SingletonRecetApp.getInstance().replaceEmail(mAuth.getCurrentUser().getEmail());
         FirebaseDatabase.getInstance().getReference("users/" + replace).addValueEventListener(valueEventListener);
 
 
-        System.out.println("uid" + mAuth.getUid());
-        //System.out.println("uid current user" + mAuth.getCurrentUser().getUid());
-        System.out.println("current user" + mAuth.getCurrentUser());
-        //System.out.println("current user email" + mAuth.getCurrentUser().getEmail());
+//        System.out.println("uid" + mAuth.getUid());
+//        System.out.println("current user" + mAuth.getCurrentUser());
 
-        buttonOK = (Button) findViewById(R.id.acceptButton);
-        buttonOK.setOnClickListener(new View.OnClickListener() {
+        //BottomNavigationView
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_cuest);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
-            public void onClick(View v) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
                 boolean check = true;
                 //comprobamos que los campos no estén vacíos
                 try {
-                    userHeight = Double.parseDouble(editTextHeight.getText().toString());
+                    userHeight = Integer.parseInt(editTextHeight.getText().toString());
                 } catch (NumberFormatException e) {
                     Toast.makeText(Cuestionario.this, "Fill Height", Toast.LENGTH_SHORT).show();
                     check = false;
                 }
                 try {
-                    userWeight = Double.parseDouble(editTextWeight.getText().toString());
+                    userWeight = Integer.parseInt(editTextWeight.getText().toString());
                 } catch (NumberFormatException e) {
                     Toast.makeText(Cuestionario.this, "Fill Weight", Toast.LENGTH_SHORT).show();
                     check = false;
@@ -180,13 +200,12 @@ public class Cuestionario extends AppCompatActivity {
 
                     String email = mAuth.getCurrentUser().getEmail();
 
-
-                    System.out.println("userHeight = " + userHeight);
-                    System.out.println("userWeight = " + userWeight);
-                    System.out.println("userYear = " + userYear);
-                    System.out.println("diet = " + diet);
-                    System.out.println("gender = " + gender);
-                    System.out.println("email = " + email);
+//                    System.out.println("userHeight = " + userHeight);
+//                    System.out.println("userWeight = " + userWeight);
+//                    System.out.println("userYear = " + userYear);
+//                    System.out.println("diet = " + diet);
+//                    System.out.println("gender = " + gender);
+//                    System.out.println("email = " + email);
 
                     //Crear Map para actualizar la BD
                     String replacedEmail = email.replace("@", "\\").
@@ -203,20 +222,49 @@ public class Cuestionario extends AppCompatActivity {
                     FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                             updateChildren(datosActualizar);
 
-//                DatabaseReference ref = database.getReference("users/"+"amarilleitor96\\gmail-com");
-//                FirebaseDatabase.getInstance().getReference().getKey(ref);
 
+                    switch (menuItem.getItemId()) {
 
-                    //Go to main
-                    Intent intent = new Intent(Cuestionario.this, MainActivity.class);
-                    startActivity(intent);
+                        case R.id.action_recipe:
+                            startActivity(new Intent(getBaseContext(), MainActivity.class));
+                            break;
 
+                        case R.id.action_ingredient:
+                            startActivity(new Intent(getBaseContext(), SelectIngredients.class));
+                            break;
 
-                }else{
-                    System.out.println("Algún campo vacío!");
+                        case R.id.action_cuest:
+                            startActivity(new Intent(getBaseContext(), Cuestionario.class));
+                            break;
+
+                    }
+                    return true;
+                    // si hay campos vacíos
+                } else {
+                    Toast.makeText(getBaseContext(), "Answer the form, please", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            mAuth.signOut();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 

@@ -27,7 +27,7 @@ public class User {
         this.emailId = emailId;
     }
 
-    public double getAltura() {
+    public int getAltura() {
         return altura;
     }
 
@@ -35,7 +35,7 @@ public class User {
         this.altura = altura;
     }
 
-    public double getPeso() {
+    public int getPeso() {
         return peso;
     }
 

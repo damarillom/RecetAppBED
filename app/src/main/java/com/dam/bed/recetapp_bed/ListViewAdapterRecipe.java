@@ -2,12 +2,20 @@ package com.dam.bed.recetapp_bed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +25,11 @@ public class ListViewAdapterRecipe extends BaseAdapter{
     LayoutInflater inflater;
     List<Recipe> recipeList;
     ArrayList<Recipe> arrayList;
+
+    final long ONE_MEGABYTE = 1024 * 1024;
+    ImageView image;
+    String nameRecipe;
+
 
     public ListViewAdapterRecipe(Context context, List<Recipe> recipeList) {
         mContext = context;
@@ -47,8 +60,8 @@ public class ListViewAdapterRecipe extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
         if (convertView == null){
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.row_recipe, null);
@@ -64,13 +77,34 @@ public class ListViewAdapterRecipe extends BaseAdapter{
 
         holder.titleRecipe.setText(recipeList.get(position).getName());
         holder.typeRecipe.setText(recipeList.get(position).getType());
-        holder.iconRecipe.setImageResource(recipeList.get(position).getImage());
+
+        //
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        StorageReference imageRef = storageRef.child(recipeList.get(position).getImg());
+
+        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                holder.iconRecipe.setImageBitmap(bitmap);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //a la pantalla de Dani, PUT EXTRA
-                Intent intent = new Intent(v.getContext(), RecipeView.class);
+
+                Intent intent = new Intent(mContext.getApplicationContext(), RecipeView.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Name", holder.titleRecipe.getText().toString());
+//                System.out.println("*********" + holder.titleRecipe.getText().toString());
                 mContext.startActivity(intent);
             }
         });

@@ -3,6 +3,7 @@ package com.dam.bed.recetapp_bed;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -22,10 +31,44 @@ public class MainActivity extends AppCompatActivity
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListner;
 
+    ListView listView;
+    ListViewAdapterRecipe adapter;
+
+    ArrayList<Recipe> arrayList = new ArrayList<>();
+
+    String diet = "";
+    String email, replacedEmail;
+    ArrayList<String> ingreUser, ingreRecipe;
+
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListner);
+
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_recipe);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_recipe:
+                        startActivity(new Intent(getBaseContext(), MainActivity.class));
+                        break;
+
+                    case R.id.action_ingredient:
+                        startActivity(new Intent(getBaseContext(), SelectIngredients.class));
+                        break;
+
+                    case R.id.action_cuest:
+                        startActivity(new Intent(getBaseContext(), Cuestionario.class));
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -34,15 +77,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /**FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,16 +87,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //En este comentario esta el codigo de enviar el correo de reset password
-        Button button = (Button) findViewById(R.id.signout);
-        Button buttonCuest = (Button) findViewById(R.id.buttonToCuest);
-        buttonCuest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //mAuth.sendPasswordResetEmail("amarilleitor96@gmail.com");
-                startActivity(new Intent(MainActivity.this, RecipeView.class));
-            }
-        });
+
 
         //FIREBASE
         mAuth = FirebaseAuth.getInstance();
@@ -75,13 +100,73 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
-        /**button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-            }
-        });*/
-    }
+        try {
+            listView = findViewById(R.id.listViewRecipeList);
+
+            mAuth = FirebaseAuth.getInstance();
+            email = mAuth.getCurrentUser().getEmail();
+            //replacedEmail = email.replace("@", "\\").replace(".", "-");
+            replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
+
+            ValueEventListener valueEventListenerUser = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    diet = user.getDiet();
+
+                    ingreUser = user.getIngredients();
+
+                    ValueEventListener valueEventListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                Recipe recipe = ds.getValue(Recipe.class);
+                                ingreRecipe = recipe.getIngredients();
+
+                                // Si la lista de ingredientes del usuario esta vacia,
+                                // inicializamos ingreUser como una nueva ArrayLista para que no de null
+                                if (ingreUser == null) ingreUser = new ArrayList<>();
+
+                                if (Collections.disjoint(ingreUser, ingreRecipe)) {
+                                    if (diet.equals("Omniv")) {
+                                        arrayList.add(recipe);
+                                    } else if (diet.equals("Vegetarian")) {
+                                        if (!recipe.getType().equals("Omniv")) {
+                                            arrayList.add(recipe);
+                                        }
+                                    } else if (diet.equals("Vegan")) {
+                                        if (recipe.getType().equals("Vegan")) {
+                                            arrayList.add(recipe);
+                                        }
+                                    }
+                                }
+                            }
+                            adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
+                            listView.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            System.out.println("error" + databaseError.getMessage());
+                        }
+                    };
+                    FirebaseDatabase.getInstance().getReference("Recipes/").addValueEventListener(valueEventListener);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    System.out.println("error" + databaseError.getMessage());
+                }
+            };
+            FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).addValueEventListener(valueEventListenerUser);
+
+
+        } catch (Exception e) {
+            System.out.println("************Error");
+        }
+   }
+
+
 
     @Override
     public void onBackPressed() {
@@ -108,7 +193,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.logout) {
+            mAuth.signOut();
             return true;
         }
 
@@ -122,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.recipes) {
-            startActivity(new Intent(MainActivity.this, RecipeList.class));
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
         } else if (id == R.id.ingredients) {
             startActivity(new Intent(MainActivity.this, SelectIngredients.class));
         } else if (id == R.id.cuest) {
@@ -139,4 +225,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

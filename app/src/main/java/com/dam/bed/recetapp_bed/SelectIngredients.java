@@ -1,7 +1,10 @@
 package com.dam.bed.recetapp_bed;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,6 +38,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -42,19 +47,30 @@ import static com.dam.bed.recetapp_bed.R.string.searchingredient;
 
 public class SelectIngredients extends AppCompatActivity {
 
-//    SearchView mSearchView;
-    ListView mListView, mListView2;
-    Button accept;
+    //    SearchView mSearchView;
+    ListView mListView;
 
     ArrayList<String> ingredients = new ArrayList<>();
     ArrayList<String> ingredientsNo = new ArrayList<>();
+    static ArrayAdapter<String> adapter;
+
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Ingredients");
+    DatabaseReference userIngredients;
 
     private FirebaseAuth mAuth;
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    String email;
-    String replacedEmail;
+    String email, replacedEmail;
+    String diet = "";
+    final int OMNIV = 2; //TODO pq no se usa?
+    final int VEGETARIAN = 1;
+    final int VEGAN = 0;
+
+    // Conseguir dieta usuario
+    // Filtrar ingredientes
+    // Omniv = 2
+    // Vegetarian = 1
+    // Vegan = 0
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +79,100 @@ public class SelectIngredients extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         email = mAuth.getCurrentUser().getEmail();
-        replacedEmail = email.replace("@", "\\").
-                replace(".", "-");
-        DatabaseReference refUser = database.getReference("users/" + replacedEmail + "/ingredients");
+        replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
+        userIngredients = database.getReference("users/" + replacedEmail + "/ingredients");
+        final DatabaseReference userListener = database.getReference("users/" + replacedEmail);
+
+        // Cambiar el titulo de la toolbar, mejor en onStart o más abajo
+        getSupportActionBar().setTitle(R.string.excludeIngredients);
 
         //View elements
-//        mSearchView = findViewById(R.id.action_search);
         mListView = findViewById(R.id.listView);
-        mListView2 = findViewById(R.id.listView2);
-        accept = findViewById(R.id.acceptIngredients);
 
-        refUser.addValueEventListener(new ValueEventListener() {
+        // Añadir los ingredientes a la lista
+        adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_expandable_list_item_1,
+                ingredients){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View row = super.getView(position, convertView, parent);
+                if(ingredientsNo.contains(getItem(position)))
+                {
+                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsNO));
+                }
+                else
+                {
+                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsOK));
+                }
+                return row;
+            }
+        };
+
+
+        mListView.setAdapter(adapter);
+        //tot en verde por defecto
+        mListView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark)); // background = lineas de separacion
+        mListView.setTextFilterEnabled(true);
+        mListView.setItemsCanFocus(true);
+
+
+        userListener.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                diet = user.getDiet();
+
+                // Conseguir los ingredientes
+                ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        System.out.println("Añadiendo ingredients a lista 1");
+
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                            Ingredient ingredient = ds.getValue(Ingredient.class);
+
+                            // FILTRAR INGREDIENTES POR EL TIPO DE DIETA DEL USUARIO
+                            if (diet.equalsIgnoreCase("Omniv")) {
+                                ingredients.add(ingredient.getName());
+                            }
+                            else if (diet.equalsIgnoreCase("Vegetarian")) {
+                                // Coge el 0 y el 1
+                                if (ingredient.getType() == VEGAN || ingredient.getType() == VEGETARIAN) {
+                                    ingredients.add(ingredient.getName());
+                                }
+                            }
+                            else if (diet.equalsIgnoreCase("Vegan")) {
+                                if (ingredient.getType() == VEGAN) {    // Coge el 0
+                                    ingredients.add(ingredient.getName());
+                                }
+                            }
+                            System.out.println("ingredient - " + ingredient);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        userIngredients.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                System.out.println("Añadiento ingredients a lista 2");
+                System.out.println("Añadiendo ingredients a lista 2");
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String ingredient = ds.getValue(String.class);
                     ingredientsNo.add(ingredient);
@@ -91,48 +186,6 @@ public class SelectIngredients extends AppCompatActivity {
             }
         });
 
-        // Conseguir los ingredientes
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                System.out.println("Añadiento ingredients a lista 1");
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Ingredient ingredient = ds.getValue(Ingredient.class);
-                    if (!ingredientsNo.contains(ingredient.getName())) {
-                        ingredients.add(ingredient.getName());
-                    }
-//                    contentIngredients.add(ingredient);
-                    System.out.println("ingredient - " + ingredient);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
-
-
-        // Añadir los ingredientes a la lista
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_expandable_list_item_1,
-                ingredients);
-        mListView.setAdapter(adapter);
-        mListView.setBackgroundColor(Color.parseColor("#99ff99"));
-        mListView.setTextFilterEnabled(true);
-        mListView.setItemsCanFocus(true);
-
-        // Lista 2 - Ingredientes que se excluyen
-        final ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
-                android.R.layout.simple_expandable_list_item_1,
-                ingredientsNo);
-        mListView2.setAdapter(adapter2);
-        mListView2.setBackgroundColor(Color.parseColor("#ff5050"));
-
-
 
         //Onclick de la lista principal
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -141,52 +194,22 @@ public class SelectIngredients extends AppCompatActivity {
                 Object o = mListView.getItemAtPosition(position);
                 System.out.println("position - " + position);
                 String item = (String) o;
-//                Snackbar.make(view, "Adding ingredient: "+item, Snackbar.LENGTH_SHORT).show();
+
+                // Que no haya duplicados
+                if (ingredientsNo.contains(item)) {
+                    ingredientsNo.remove(item);
+                    adapter.notifyDataSetChanged();
+
+                    return;
+                }
 
                 // Añadir a la segunda lista
                 ingredientsNo.add(item);
-//                adapter2.add(item);
+                Collections.sort(ingredientsNo);    // Ordernar lista 2
                 System.out.println("adding ingredient " + item + " a lista 2");
-                adapter2.notifyDataSetChanged();
 
-                // Eliminar de la lista principal
-//                adapter.remove(item);
-                ingredients.remove(item);
                 adapter.notifyDataSetChanged();
 
-//                mSearchView.clearFocus();
-//                mListView.clearTextFilter();
-            }
-        });
-
-        // Onclick segunda lista
-        mListView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object o = mListView2.getItemAtPosition(position);
-                String item = (String) o;
-//                Snackbar.make(view, "Removing ingredient: "+item, Snackbar.LENGTH_SHORT).show();
-
-                // Añadir a la primera lista
-                ingredients.add(item);
-//                adapter.add(item);
-                System.out.println("adding ingredient " + item + " a lista 1");
-                adapter.notifyDataSetChanged();
-
-                // Eliminar de la lista secundaria
-//                adapter2.remove(item);
-                ingredientsNo.remove(item);
-                adapter2.notifyDataSetChanged();
-            }
-        });
-
-//        setupSearchView();
-
-        accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Lista de ingredientes que se excluyen");
-                saveIngredients(ingredientsNo);
             }
         });
     }
@@ -195,49 +218,41 @@ public class SelectIngredients extends AppCompatActivity {
      * Guarda en la base de datos los ingredients que el usuario no quiere
      * @param ingredients
      */
-    private void saveIngredients(ArrayList<String> ingredients) {
+    private void saveIngredients(HashSet<String> ingredients) {
 
+        System.out.println("Save ingredients");
         for (String s : ingredients) {
             System.out.println(s);
         }
 
-
+        ArrayList tmpLista = new ArrayList<>(ingredients);
         Map<String, Object> ingredientsMap = new HashMap<>();
-        ingredientsMap.put("ingredients", ingredients);
+        ingredientsMap.put("ingredients", tmpLista);
 
         FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                 updateChildren(ingredientsMap);
+
+        Toast.makeText(this, R.string.added_ingredients, Toast.LENGTH_SHORT).show();
+
+//        startActivity(new Intent(SelectIngredients.this, RecipeList.class));
     }
 
-
-    //    private void setupSearchView() {
-//        mSearchView.setIconifiedByDefault(false);
-//        mSearchView.setOnQueryTextListener(this);
-////        mSearchView.setSubmitButtonEnabled(true);
-//        mSearchView.setQueryHint("Search ingredient");
-////        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-////            @Override
-////            public boolean onClose() {
-////                mSearchView.clearFocus();
-////                return true;
-////            }
-////        });
-//    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+        getMenuInflater().inflate(R.menu.main, menu);
         inflater.inflate(R.menu.ingredients_menu, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint(getText(R.string.searchingredient));
+//        searchView.setQueryHint(getText(R.string.searchingredient));
 //        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 //            @Override
 //            public boolean onQueryTextSubmit(String query) {
 //                //se oculta el EditText
-//                searchView.setQuery("", false);
+//                searchView.setQuery("", true);
 //                searchView.setIconified(true);
 //                return true;
 //            }
@@ -247,15 +262,66 @@ public class SelectIngredients extends AppCompatActivity {
 //                    mListView.clearTextFilter();
 //                } else {
 //                    mListView.setFilterText(newText);
-//                    System.out.println("Lista ingredients");
-//                    for (String ingredient : ingredients) {
-//                        System.out.println(ingredient);
-//                    }
 //                }
 //                return true;
 //            }
 //        });
+//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                searchView.clearFocus();
+//                return true;
+//            }
+//        });
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                System.out.println("Lista de ingredientes que se excluyen");
+                saveIngredients(new HashSet<String>(ingredientsNo));
+
+                switch (menuItem.getItemId()) {
+                    case R.id.action_recipe:
+                        startActivity(new Intent(getBaseContext(), MainActivity.class));
+                        break;
+
+                    case R.id.action_ingredient:
+                        startActivity(new Intent(getBaseContext(), SelectIngredients.class));
+                        break;
+
+                    case R.id.action_cuest:
+                        startActivity(new Intent(getBaseContext(), Cuestionario.class));
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.logout) {
+            mAuth.signOut();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 

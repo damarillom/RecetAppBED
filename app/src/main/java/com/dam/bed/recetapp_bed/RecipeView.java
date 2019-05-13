@@ -1,11 +1,17 @@
 package com.dam.bed.recetapp_bed;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -25,6 +31,13 @@ public class RecipeView extends AppCompatActivity {
     static TextView title, ingredients, description;
     static ImageView image;
     final long ONE_MEGABYTE = 1024 * 1024;
+    private int textSize = 16;
+
+    // Limites del size de las letras
+    private final int MAX_TEXT_SIZE = 22;
+    private final int MIN_TEXT_SIZE = 14;
+
+    static String img = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,36 +48,26 @@ public class RecipeView extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title);
         ingredients = (TextView) findViewById(R.id.ingredients);
         description = (TextView) findViewById(R.id.description);
+
         String name = "Pollo con arroz";
-        title.setText(name);
-        ingredientes = "Ingredientes:\n";
 
-        //PRUEBA STORAGE
-        // Create a storage reference from our app
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            name = extras.getString("Name");
+            System.out.println("*********************" + name);
+        }
 
-        StorageReference imageRef = storageRef.child("quinoas.jpg");
 
-        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                image.setImageBitmap(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
+        // Nombre de la receta en la toolbar
+        getSupportActionBar().setTitle(name);
+        ingredientes = "Ingredientes:\n\n";
 
 
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Recipe recipe = dataSnapshot.getValue(Recipe.class);
-                System.out.println("************************"+recipe.getName());
-                //System.out.println("*********"+user.getAltura());
+
                 for(int x=0;x<recipe.getIngredients().size();x++) {
                     System.out.println(recipe.getIngredients().get(x));
                     ingredientes += "\t- " + recipe.getIngredients().get(x) + "\n";
@@ -72,7 +75,27 @@ public class RecipeView extends AppCompatActivity {
 
                 ingredients.setText(ingredientes);
 
-                description.setText(recipe.getDescription());
+                description.setText("Pasos a seguir:\n\n" + recipe.getDescription());
+
+                img = recipe.getImg();
+
+                //STORAGE
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+                StorageReference imageRef = storageRef.child(img);
+
+                imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        image.setImageBitmap(bitmap);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
             }
 
             @Override
@@ -81,5 +104,53 @@ public class RecipeView extends AppCompatActivity {
             }
         };
         FirebaseDatabase.getInstance().getReference("Recipes/" + name).addValueEventListener(valueEventListener);
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.letter_size, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.mas:
+
+                changeTextSize(2);
+                return true;
+
+            case R.id.menos:
+
+                changeTextSize(-2);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    /**
+     * Cambiar el size del texto de la receta
+     * @param num
+     * @return
+     */
+    private boolean changeTextSize(int num) {
+
+        // Limites de size de las letras
+        if (num > 0 && textSize == MAX_TEXT_SIZE) return false;
+        if (num < 0 && textSize == MIN_TEXT_SIZE) return false;
+
+        textSize += num;
+        ingredients.setTextSize(textSize);
+        description.setTextSize(textSize);
+        System.out.println("Text size: " + textSize);
+        return true;
+    }
+
 }

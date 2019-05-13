@@ -13,17 +13,17 @@ public class Recipe {
     private String description;
     private String type;
     private ArrayList<String> ingredients;
-    private int image;
+    private String img;
 
     public Recipe() {
     }
 
-    public Recipe(String name, String description, String dietType, ArrayList<String> ingredients, int image) {
+    public Recipe(String name, String description, String dietType, ArrayList<String> ingredients, String image) {
         this.name = name;
         this.description = description;
         this.type = dietType;
         this.ingredients = new ArrayList<>(ingredients);
-        this.image = image;
+        this.img = image;
     }
 
     public String getName() {
@@ -56,9 +56,13 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
-    public int getImage() { return image; }
+    public String getImg() {
+        return img;
+    }
 
-    public void setImage(int image) { this.image = image; }
+    public void setImg(String image) {
+        this.img = image;
+    }
 
     @Override
     public String toString() {
@@ -67,23 +71,23 @@ public class Recipe {
                 ", description='" + description + '\'' +
                 ", dietType='" + type + '\'' +
                 ", ingredients=" + ingredients +
-                ", image=" + image +
+                ", image=" + img +
                 '}';
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Recipe recipe = (Recipe) o;
-        return Objects.equals(name, recipe.name);
+
+        return name != null ? name.equals(recipe.name) : recipe.name == null;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-
-        return Objects.hash(name);
+        return name != null ? name.hashCode() : 0;
     }
 }
