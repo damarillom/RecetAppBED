@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/mas"
-        android:icon="@drawable/ic_expand_less_black_50dp"
+        android:icon="@drawable/ic_zoom_in_black_24dp"
         android:title="@string/increase_size"
         app:showAsAction="always" />
     <item
         android:id="@+id/menos"
-        android:icon="@drawable/ic_expand_more_black_24dp"
+        android:icon="@drawable/ic_zoom_out_black_24dp"
         android:title="@string/decrease_size"
         app:showAsAction="always" />
 </menu>
