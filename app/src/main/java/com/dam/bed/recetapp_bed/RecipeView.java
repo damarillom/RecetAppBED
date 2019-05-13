@@ -50,14 +50,14 @@ public class RecipeView extends AppCompatActivity {
         description = (TextView) findViewById(R.id.description);
 
         String name = "Pollo con arroz";
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                name = extras.getString("Name");
-                System.out.println("*********************" + name);
-            }
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            name = extras.getString("Name");
+            System.out.println("*********************" + name);
         }
+
+
         // Nombre de la receta en la toolbar
         getSupportActionBar().setTitle(name);
         ingredientes = "Ingredientes:\n\n";
@@ -129,8 +129,8 @@ public class RecipeView extends AppCompatActivity {
                 changeTextSize(-2);
                 return true;
 
-                default:
-                    return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
     }
@@ -152,4 +152,5 @@ public class RecipeView extends AppCompatActivity {
         System.out.println("Text size: " + textSize);
         return true;
     }
+
 }
