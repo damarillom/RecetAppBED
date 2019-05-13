@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
-//        implements NavigationView.OnNavigationItemSelectedListener {
 
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListner;
@@ -77,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.recipelist);
 
         //FIREBASE
         mAuth = FirebaseAuth.getInstance();
@@ -189,5 +189,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
