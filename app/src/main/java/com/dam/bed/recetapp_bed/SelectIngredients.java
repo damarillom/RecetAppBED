@@ -104,7 +104,9 @@ public class SelectIngredients extends AppCompatActivity {
                 }
                 else
                 {
-                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsOK));
+//                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsOK));
+//                    row.setBackgroundColor (Color.parseColor("#b4ffffff"));
+                    row.setBackgroundColor (Color.parseColor("#a099ff99"));
                 }
                 return row;
             }
@@ -113,7 +115,8 @@ public class SelectIngredients extends AppCompatActivity {
 
         mListView.setAdapter(adapter);
         //tot en verde por defecto
-        mListView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark)); // background = lineas de separacion
+//        mListView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark)); // background = lineas de separacion
+//        mListView.setBackgroundColor(Color.parseColor("#99ff99"));
         mListView.setTextFilterEnabled(true);
         mListView.setItemsCanFocus(true);
 
