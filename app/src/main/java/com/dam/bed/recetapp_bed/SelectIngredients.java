@@ -104,9 +104,9 @@ public class SelectIngredients extends AppCompatActivity {
                 }
                 else
                 {
-//                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsOK));
-//                    row.setBackgroundColor (Color.parseColor("#b4ffffff"));
-                    row.setBackgroundColor (Color.parseColor("#a099ff99"));
+                    row.setBackgroundColor (getResources().getColor(R.color.ingredientsOK));
+//                    row.setBackgroundColor (Color.parseColor("#A0FFFFFF"));
+//                    row.setBackgroundColor (Color.parseColor("#a099ff99"));
                 }
                 return row;
             }
