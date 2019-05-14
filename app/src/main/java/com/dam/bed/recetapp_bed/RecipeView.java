@@ -61,9 +61,11 @@ public class RecipeView extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 try {
-                    textSize = user.getLetterSize();
-                    ingredients.setTextSize(textSize);
-                    description.setTextSize(textSize);
+                    if (user.getLetterSize() > 0) {
+                        textSize = user.getLetterSize();
+                        ingredients.setTextSize(textSize);
+                        description.setTextSize(textSize);
+                    }
                 } catch (Exception e) {
                     System.out.println("Error: " + e);
                 }
