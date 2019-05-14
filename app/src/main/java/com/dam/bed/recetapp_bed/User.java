@@ -11,6 +11,7 @@ public class User {
     public String gender;
     public String diet;
     private boolean quest;
+    public int letterSize;
     private ArrayList<String> ingredients;
 
     public User() {    }
@@ -82,4 +83,8 @@ public class User {
     public void setIngredients(ArrayList<String> ingredients) {
         this.ingredients = ingredients;
     }
+
+    public int getLetterSize() { return letterSize; }
+
+    public void setLetterSize(int letterSize) { this.letterSize = letterSize; }
 }
