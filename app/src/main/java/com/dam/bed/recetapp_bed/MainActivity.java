@@ -46,15 +46,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListner);
 
-//        // TODO mostrar al usuario que no se ha encontrado ninguna receta
-//        System.out.println("Arraylist size: " + arrayList.size());
-//        if (arrayList.size() == 0) {
-//            listView.setVisibility(View.GONE);
-//            noRecipes.setVisibility(View.VISIBLE);
-//        } else {
-//            noRecipes.setVisibility(View.GONE);
-//            listView.setVisibility(View.VISIBLE);
-//        }
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
