@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.os.Bundle;
@@ -247,13 +248,14 @@ public class SelectIngredients extends AppCompatActivity {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+
         searchView.setQueryHint(getText(R.string.searchingredient));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //se oculta el EditText
-                searchView.setQuery("", true);
-                searchView.setIconified(false);
+                searchView.setQuery("", false);
+                searchView.setIconified(true);
                 return true;
             }
             @Override
