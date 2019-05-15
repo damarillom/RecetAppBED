@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +35,9 @@ public class ListViewAdapterRecipe extends BaseAdapter{
     final long ONE_MEGABYTE = 1024 * 1024;
     ImageView image;
     String nameRecipe;
+
+    String imagePath = "";
+    String dirPath = "/data/data/com.dam.bed.recetapp_bed/files/images/";
 
 
     public ListViewAdapterRecipe(Context context, List<Recipe> recipeList) {
@@ -79,23 +88,48 @@ public class ListViewAdapterRecipe extends BaseAdapter{
         holder.typeRecipe.setText(recipeList.get(position).getType());
 
         //
+        imagePath = recipeList.get(position).getImg();
+
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-        StorageReference imageRef = storageRef.child(recipeList.get(position).getImg());
+        StorageReference imageRef = storageRef.child(imagePath);
+        File f = new File(dirPath + imagePath);
+        System.out.println();
+        if (!f.exists()) {
+            imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    imagePath = recipeList.get(position).getImg();
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                holder.iconRecipe.setImageBitmap(bitmap);
+                    //String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    File myDir = new File(dirPath);
+                    myDir.mkdir();
+                    //System.out.println(myDir.exists() + "*********************************");
+                    File file = new File(myDir, imagePath);
+                    try (FileOutputStream out = new FileOutputStream(file)) {
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                        // PNG is a lossless format, the compression factor (100) is ignored
+                    } catch (IOException e) {
+                        System.out.println("ERROR: " + e);
+                        e.printStackTrace();
+                    }
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
+
+                    holder.iconRecipe.setImageBitmap(bitmap);
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
+        } else {
+            Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), new BitmapFactory.Options());
+            holder.iconRecipe.setImageBitmap(b);
+        }
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

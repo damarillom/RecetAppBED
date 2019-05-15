@@ -49,6 +49,7 @@
     <string name="ingredients">Ingredients</string>
     <string name="recipes">Recipes</string>
     <string name="perfil">Perfil</string>
+    <string name="imagePath">/data/data/com.dam.bed.recetapp_bed/files/images/</string>
 
 
 </resources>
