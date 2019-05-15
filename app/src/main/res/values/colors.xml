@@ -6,4 +6,5 @@
     <color name="colorLink">#2200ff</color>
     <color name="ingredientsOK">#A0FFFFFF</color>
     <color name="ingredientsNO">#8cff5050</color>
+    <color name="splash">#6DEB0B</color>
 </resources>
