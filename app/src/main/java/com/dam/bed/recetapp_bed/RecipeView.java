@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,8 @@ public class RecipeView extends AppCompatActivity {
     private final int MIN_TEXT_SIZE = 14;
 
     static String img = "";
+
+    String dirPath = "/data/data/com.dam.bed.recetapp_bed/files/images/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +112,11 @@ public class RecipeView extends AppCompatActivity {
                 img = recipe.getImg();
 
                 //STORAGE
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+                File photo = new File(dirPath + img);
+                Bitmap bitmap = BitmapFactory.decodeFile(photo.getAbsolutePath(), new BitmapFactory.Options());
+                image.setImageBitmap(bitmap);
+                /**StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
                 StorageReference imageRef = storageRef.child(img);
 
@@ -124,7 +131,7 @@ public class RecipeView extends AppCompatActivity {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle any errors
                     }
-                });
+                });*/
             }
 
             @Override
