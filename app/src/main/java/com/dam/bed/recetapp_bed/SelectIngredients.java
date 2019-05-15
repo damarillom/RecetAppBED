@@ -1,20 +1,16 @@
 package com.dam.bed.recetapp_bed;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.os.Bundle;
-import android.support.v7.widget.MenuItemHoverListener;
-import android.support.v7.widget.Toolbar;
+
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,9 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 
@@ -34,7 +29,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -43,7 +37,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import static com.dam.bed.recetapp_bed.R.string.searchingredient;
 
 public class SelectIngredients extends AppCompatActivity {
 
@@ -67,10 +60,8 @@ public class SelectIngredients extends AppCompatActivity {
     final int VEGAN = 0;
 
     // Conseguir dieta usuario
-    // Filtrar ingredientes
-    // Omniv = 2
-    // Vegetarian = 1
-    // Vegan = 0
+    // Filtrar por ingredientes
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +85,13 @@ public class SelectIngredients extends AppCompatActivity {
                 this,
                 android.R.layout.simple_expandable_list_item_1,
                 ingredients){
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View row = super.getView(position, convertView, parent);
+                //para centrar
+//                row.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 if(ingredientsNo.contains(getItem(position)))
                 {
                     row.setBackgroundColor (getResources().getColor(R.color.ingredientsNO));
@@ -313,13 +307,8 @@ public class SelectIngredients extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.logout) {
+        if (item.getItemId() == R.id.logout) {
             mAuth.signOut();
             return true;
         }

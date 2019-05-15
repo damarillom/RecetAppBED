@@ -1,7 +1,6 @@
 package com.dam.bed.recetapp_bed;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class User {
     public String emailId;

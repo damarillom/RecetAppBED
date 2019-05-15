@@ -26,10 +26,9 @@
         <activity android:name=".Cuestionario" />
         <activity android:name=".ForgotPass" android:screenOrientation="portrait"/>
         <activity android:name=".RecipeView"
-            android:parentActivityName=".MainActivity"></activity>
-        <!--<activity android:name=".RecipeList"></activity>-->
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".SelectIngredients"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>
