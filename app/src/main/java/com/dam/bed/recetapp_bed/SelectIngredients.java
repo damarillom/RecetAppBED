@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ListView;
 
 import android.widget.Toast;
@@ -111,7 +113,7 @@ public class SelectIngredients extends AppCompatActivity {
         //tot en verde por defecto
 //        mListView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark)); // background = lineas de separacion
 //        mListView.setBackgroundColor(Color.parseColor("#99ff99"));
-        mListView.setTextFilterEnabled(true);
+        mListView.setTextFilterEnabled(false);
         mListView.setItemsCanFocus(true);
 
 
@@ -242,23 +244,28 @@ public class SelectIngredients extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         inflater.inflate(R.menu.ingredients_menu, menu);
 
+        final Filter filter = adapter.getFilter();
+
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+
         searchView.setQueryHint(getText(R.string.searchingredient));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //se oculta el EditText
-                searchView.setQuery("", true);
+                searchView.setQuery("", false);
                 searchView.setIconified(true);
                 return true;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (TextUtils.isEmpty(newText)) {
-                    mListView.clearTextFilter();
+                    filter.filter("");
+//                    mListView.clearTextFilter();
                 } else {
-                    mListView.setFilterText(newText);
+                    filter.filter(newText);
+//                    mListView.setFilterText(newText);
                 }
                 return true;
             }
