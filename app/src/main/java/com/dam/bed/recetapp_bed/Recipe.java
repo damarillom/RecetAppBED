@@ -1,11 +1,8 @@
 package com.dam.bed.recetapp_bed;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
 
 public class Recipe {
 

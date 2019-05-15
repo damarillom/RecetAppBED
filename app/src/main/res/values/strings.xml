@@ -46,7 +46,9 @@
     <string name="logout">Logout</string>
     <string name="norecipes">No recipes found</string>
     <string name="recipelist">List of Recipes</string>
-
+    <string name="ingredients">Ingredients</string>
+    <string name="recipes">Recipes</string>
+    <string name="perfil">Perfil</string>
 
 
 </resources>
