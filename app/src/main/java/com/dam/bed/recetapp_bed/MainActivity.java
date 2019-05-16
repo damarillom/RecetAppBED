@@ -105,56 +105,60 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
-                    diet = user.getDiet();
+                    if (user.isQuest()) {
+                        diet = user.getDiet();
 
-                    ingreUser = user.getIngredients();
+                        ingreUser = user.getIngredients();
 
-                    ValueEventListener valueEventListener = new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                Recipe recipe = ds.getValue(Recipe.class);
-                                ingreRecipe = recipe.getIngredients();
+                        ValueEventListener valueEventListener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    Recipe recipe = ds.getValue(Recipe.class);
+                                    ingreRecipe = recipe.getIngredients();
 
-                                // Si la lista de ingredientes del usuario esta vacia,
-                                // inicializamos ingreUser como una nueva ArrayLista para que no de null
-                                if (ingreUser == null) ingreUser = new ArrayList<>();
+                                    // Si la lista de ingredientes del usuario esta vacia,
+                                    // inicializamos ingreUser como una nueva ArrayLista para que no de null
+                                    if (ingreUser == null) ingreUser = new ArrayList<>();
 
-                                if (Collections.disjoint(ingreUser, ingreRecipe)) {
-                                    if (diet.equals("Omniv")) {
-                                        arrayList.add(recipe);
-                                    } else if (diet.equals("Vegetarian")) {
-                                        if (!recipe.getType().equals("Omniv")) {
+                                    if (Collections.disjoint(ingreUser, ingreRecipe)) {
+                                        if (diet.equals("Omniv")) {
                                             arrayList.add(recipe);
-                                        }
-                                    } else if (diet.equals("Vegan")) {
-                                        if (recipe.getType().equals("Vegan")) {
-                                            arrayList.add(recipe);
+                                        } else if (diet.equals("Vegetarian")) {
+                                            if (!recipe.getType().equals("Omniv")) {
+                                                arrayList.add(recipe);
+                                            }
+                                        } else if (diet.equals("Vegan")) {
+                                            if (recipe.getType().equals("Vegan")) {
+                                                arrayList.add(recipe);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            // TODO mostrar al usuario que no se ha encontrado ninguna receta
-                            System.out.println("Arraylist size: " + arrayList.size());
-                            if (arrayList.size() == 0) {
+                                // TODO mostrar al usuario que no se ha encontrado ninguna receta
+                                System.out.println("Arraylist size: " + arrayList.size());
+                                if (arrayList.size() == 0) {
 //                                listView.setVisibility(View.GONE);
-                                noRecipesFound.setVisibility(View.VISIBLE);
-                                System.out.println("Text no recipes: " + noRecipesFound.getText());
+                                    noRecipesFound.setVisibility(View.VISIBLE);
+                                    System.out.println("Text no recipes: " + noRecipesFound.getText());
+                                } else {
+                                    noRecipesFound.setVisibility(View.GONE);
+                                    listView.setVisibility(View.VISIBLE);
+                                }
+                                adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
+                                listView.setAdapter(adapter);
                             }
-                            else {
-                                noRecipesFound.setVisibility(View.GONE);
-                                listView.setVisibility(View.VISIBLE);
-                            }
-                            adapter = new ListViewAdapterRecipe(getBaseContext(), arrayList);
-                            listView.setAdapter(adapter);
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            System.out.println("error" + databaseError.getMessage());
-                        }
-                    };
-                    FirebaseDatabase.getInstance().getReference("Recipes/").addValueEventListener(valueEventListener);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                System.out.println("error" + databaseError.getMessage());
+                            }
+                        };
+                        FirebaseDatabase.getInstance().getReference("Recipes/").addValueEventListener(valueEventListener);
+
+                    } else {
+                        startActivity(new Intent(MainActivity.this, Cuestionario.class));
+                    }
                 }
 
                 @Override
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             System.out.println("************Error");
         }
-   }
+    }
 
 
 
