@@ -37,16 +37,16 @@
             android:text="@string/send"
             android:textColor="@android:color/black"
             />
+
         <TextView
             android:id="@+id/login_page"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
             android:gravity="center"
-            android:text="Remember your Pasword? Login"
-            android:textSize="16sp"
+            android:text="@string/rememberpassword"
             android:textColor="@color/colorLink"
-            />
+            android:textSize="16sp" />
     </LinearLayout>
     <ProgressBar
         android:id="@+id/progressBar"

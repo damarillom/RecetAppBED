@@ -48,8 +48,9 @@
     <string name="recipelist">List of Recipes</string>
     <string name="ingredients">Ingredients</string>
     <string name="recipes">Recipes</string>
-    <string name="perfil">Perfil</string>
+    <string name="perfil">Profile</string>
     <string name="imagePath">/data/data/com.dam.bed.recetapp_bed/files/images/</string>
+    <string name="rememberpassword">Remember your password? Login</string>
 
 
 </resources>
