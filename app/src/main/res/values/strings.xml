@@ -51,6 +51,11 @@
     <string name="perfil">Profile</string>
     <string name="imagePath">/data/data/com.dam.bed.recetapp_bed/files/images/</string>
     <string name="rememberpassword">Remember your password? Login</string>
+    <string name="already_member">Already a member? Login</string>
+    <string name="create_account">Create account</string>
+    <string name="register">Register</string>
+    <string name="reset_password">Reset password</string>
+    <string name="questionary">Questionary</string>
 
 
 </resources>
