@@ -11,8 +11,8 @@
     <string name="password">\tContraseña</string>
     <string name="repassword">\tRepite contraseña</string>
     <string name="login">Iniciar sesión</string>
-    <string name="create_a_new_account">Crear una nueva contraseña</string>
-    <string name="forgot_password">Has olvidado la contraseña?</string>
+    <string name="create_a_new_account">Crear una nueva cuenta</string>
+    <string name="forgot_password">¿Has olvidado la contraseña?</string>
     <string name="send">Enviar correo electrónico</string>
     <string name="failed">Ha fallado</string>
     <string name="height">\tAltura (cm)</string>
@@ -43,5 +43,10 @@
     <string name="recipes">Recetas</string>
     <string name="perfil">Perfil</string>
     <string name="imagePath">/data/data/com.dam.bed.recetapp_bed/files/images/</string>
-    <string name="rememberpassword">Recuerdas tu contraseña? Inicia sesión</string>
+    <string name="rememberpassword">¿Recuerdas tu contraseña? Inicia sesión</string>
+    <string name="already_member">¿Ya eres usuario? Inicia sesión</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="register">Registro</string>
+    <string name="reset_password">Reestablecer contraseña</string>
+    <string name="questionary">Cuestionario</string>
 </resources>

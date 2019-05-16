@@ -42,6 +42,7 @@ public class Cuestionario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuestionario);
+        getSupportActionBar().setTitle(R.string.questionary);
 
         mAuth = FirebaseAuth.getInstance();
     }
