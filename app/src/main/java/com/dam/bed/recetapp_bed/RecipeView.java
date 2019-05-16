@@ -12,15 +12,11 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.HashMap;
@@ -29,12 +25,14 @@ import java.util.Map;
 public class RecipeView extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    String email;
 
     static String ingredientes = "";
     static TextView title, ingredients, description;
     static ImageView image;
     final long ONE_MEGABYTE = 1024 * 1024;
     static int textSize = 16;
+    static int finalTextSize = 16;
 
     // Limites del size de las letras
     private final int MAX_TEXT_SIZE = 22;
@@ -157,10 +155,12 @@ public class RecipeView extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.mas:
                 changeTextSize(2);
+                System.out.println(item.getTitle());
                 break;
 
             case R.id.menos:
                 changeTextSize(-2);
+                System.out.println(item.getTitle());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -173,28 +173,28 @@ public class RecipeView extends AppCompatActivity {
      */
     private boolean changeTextSize(int num) {
 
-        String email = mAuth.getCurrentUser().getEmail();
-        String replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
-
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                try {
-                    if (user.getLetterSize() > 0) {
-                        textSize = user.getLetterSize();
-                    }
-                } catch (Exception e) {
-                    System.out.println("Error: " + e);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.out.println("databaseError = " + databaseError);
-            }
-        };
-        FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).addValueEventListener(valueEventListener);
+//        email = mAuth.getCurrentUser().getEmail();
+//        String replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
+//
+//        ValueEventListener valueEventListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                User user = dataSnapshot.getValue(User.class);
+//                try {
+//                    if (user.getLetterSize() > 0) {
+//                        textSize = user.getLetterSize();
+//                    }
+//                } catch (Exception e) {
+//                    System.out.println("Error: " + e);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                System.out.println("databaseError = " + databaseError);
+//            }
+//        };
+//        FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).addValueEventListener(valueEventListener);
 
 
         // Limites de size de las letras
@@ -202,15 +202,39 @@ public class RecipeView extends AppCompatActivity {
         if (num < 0 && textSize == MIN_TEXT_SIZE) return false;
 
         textSize += num;
+
         ingredients.setTextSize(textSize);
         description.setTextSize(textSize);
         System.out.println("Text size: " + textSize);
+
+        return true;
+    }
+
+    private boolean saveLetterSizeDB() {
+        email = mAuth.getCurrentUser().getEmail();
+        String replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
 
         Map<String, Object> datosActualizar = new HashMap<>();
         datosActualizar.put("letterSize", textSize);
         FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
                 updateChildren(datosActualizar);
+
         return true;
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        saveLetterSizeDB();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        saveLetterSizeDB();
+    }
 }
