@@ -118,19 +118,19 @@ public class RecipeView extends AppCompatActivity {
                 image.setImageBitmap(bitmap);
                 /**StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-                StorageReference imageRef = storageRef.child(img);
+                 StorageReference imageRef = storageRef.child(img);
 
-                imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        image.setImageBitmap(bitmap);
-                    }
+                 imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                image.setImageBitmap(bitmap);
+                }
                 }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                }
                 });*/
             }
 
@@ -156,19 +156,14 @@ public class RecipeView extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.mas:
-
                 changeTextSize(2);
-                return true;
+                break;
 
             case R.id.menos:
-
                 changeTextSize(-2);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
-
+        return super.onOptionsItemSelected(item);
     }
 
     /**
