@@ -42,6 +42,7 @@ public class Cuestionario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuestionario);
+        getSupportActionBar().setTitle(R.string.questionary);
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -205,8 +206,7 @@ public class Cuestionario extends AppCompatActivity {
 //                    System.out.println("email = " + email);
 
                     //Crear Map para actualizar la BD
-                    String replacedEmail = email.replace("@", "\\").
-                            replace(".", "-");
+                    String replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
                     Map<String, Object> datosActualizar = new HashMap<>();
 
                     datosActualizar.put("birthday", userYear);
