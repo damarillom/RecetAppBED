@@ -23,15 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Register"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Login"/>
-        <activity android:name=".ForgotPass"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Login"/>
-        <activity android:name=".Cuestionario" />
+        <activity android:name=".Login" android:screenOrientation="portrait"/>
+        <activity android:name=".Register" android:screenOrientation="portrait"/>
+        <activity android:name=".Cuestionario"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ForgotPass" android:screenOrientation="portrait"/>
         <activity android:name=".RecipeView"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".SelectIngredients"
