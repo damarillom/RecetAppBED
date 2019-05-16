@@ -3,6 +3,8 @@
     package="com.dam.bed.recetapp_bed">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,21 +16,21 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login" />
-        <activity android:name=".Register" />
+        <activity android:name=".Login" android:screenOrientation="portrait"/>
+        <activity android:name=".Register" android:screenOrientation="portrait"/>
         <activity android:name=".Cuestionario" />
-        <activity android:name=".ForgotPass" />
-        <activity android:name=".RecipeView"></activity>
-        <activity android:name=".RecipeList"></activity>
+        <activity android:name=".ForgotPass" android:screenOrientation="portrait"/>
+        <activity android:name=".RecipeView"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".SelectIngredients"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

@@ -6,23 +6,23 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
+    android:background="@drawable/background"
     tools:context=".SelectIngredients">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-
-        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:orientation="vertical">
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp">
 
         </ListView>
 
@@ -31,8 +31,8 @@
     <LinearLayout
         android:id="@+id/llnav"
 
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="bottom"
+            android:background="@android:color/white"
             app:menu="@menu/my_navigation_items" />
     </LinearLayout>
 

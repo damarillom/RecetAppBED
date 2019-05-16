@@ -1,11 +1,8 @@
 package com.dam.bed.recetapp_bed;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,11 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,13 +22,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 public class RecipeView extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     static String ingredientes = "";
     static TextView title, ingredients, description;
     static ImageView image;
     final long ONE_MEGABYTE = 1024 * 1024;
-    private int textSize = 16;
+    static int textSize = 16;
 
     // Limites del size de las letras
     private final int MAX_TEXT_SIZE = 22;
@@ -39,10 +42,39 @@ public class RecipeView extends AppCompatActivity {
 
     static String img = "";
 
+    String dirPath = "/data/data/com.dam.bed.recetapp_bed/files/images/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_view);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        String email = mAuth.getCurrentUser().getEmail();
+        String replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
+
+        ValueEventListener valueEventListenerUser = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                try {
+                    if (user.getLetterSize() > 0) {
+                        textSize = user.getLetterSize();
+                        ingredients.setTextSize(textSize);
+                        description.setTextSize(textSize);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("databaseError = " + databaseError);
+            }
+        };
+        FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).addValueEventListener(valueEventListenerUser);
 
         image = (ImageView) findViewById(R.id.imageView2);
         title = (TextView) findViewById(R.id.title);
@@ -80,7 +112,11 @@ public class RecipeView extends AppCompatActivity {
                 img = recipe.getImg();
 
                 //STORAGE
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+                File photo = new File(dirPath + img);
+                Bitmap bitmap = BitmapFactory.decodeFile(photo.getAbsolutePath(), new BitmapFactory.Options());
+                image.setImageBitmap(bitmap);
+                /**StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
                 StorageReference imageRef = storageRef.child(img);
 
@@ -95,7 +131,7 @@ public class RecipeView extends AppCompatActivity {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle any errors
                     }
-                });
+                });*/
             }
 
             @Override
@@ -142,6 +178,30 @@ public class RecipeView extends AppCompatActivity {
      */
     private boolean changeTextSize(int num) {
 
+        String email = mAuth.getCurrentUser().getEmail();
+        String replacedEmail = SingletonRecetApp.getInstance().replaceEmail(email);
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                try {
+                    if (user.getLetterSize() > 0) {
+                        textSize = user.getLetterSize();
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("databaseError = " + databaseError);
+            }
+        };
+        FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).addValueEventListener(valueEventListener);
+
+
         // Limites de size de las letras
         if (num > 0 && textSize == MAX_TEXT_SIZE) return false;
         if (num < 0 && textSize == MIN_TEXT_SIZE) return false;
@@ -150,6 +210,11 @@ public class RecipeView extends AppCompatActivity {
         ingredients.setTextSize(textSize);
         description.setTextSize(textSize);
         System.out.println("Text size: " + textSize);
+
+        Map<String, Object> datosActualizar = new HashMap<>();
+        datosActualizar.put("letterSize", textSize);
+        FirebaseDatabase.getInstance().getReference("users/" + replacedEmail).
+                updateChildren(datosActualizar);
         return true;
     }
 

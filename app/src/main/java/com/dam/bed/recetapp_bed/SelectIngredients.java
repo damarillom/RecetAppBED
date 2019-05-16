@@ -1,20 +1,17 @@
 package com.dam.bed.recetapp_bed;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.os.Bundle;
-import android.support.v7.widget.MenuItemHoverListener;
-import android.support.v7.widget.Toolbar;
+
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,9 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.Filter;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 
@@ -34,7 +31,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -43,7 +39,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import static com.dam.bed.recetapp_bed.R.string.searchingredient;
 
 public class SelectIngredients extends AppCompatActivity {
 
@@ -62,15 +57,13 @@ public class SelectIngredients extends AppCompatActivity {
 
     String email, replacedEmail;
     String diet = "";
-    final int OMNIV = 2; //TODO pq no se usa?
+//    final int OMNIV = 2;
     final int VEGETARIAN = 1;
     final int VEGAN = 0;
 
     // Conseguir dieta usuario
-    // Filtrar ingredientes
-    // Omniv = 2
-    // Vegetarian = 1
-    // Vegan = 0
+    // Filtrar por ingredientes
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +87,13 @@ public class SelectIngredients extends AppCompatActivity {
                 this,
                 android.R.layout.simple_expandable_list_item_1,
                 ingredients){
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View row = super.getView(position, convertView, parent);
+                //para centrar
+//                row.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 if(ingredientsNo.contains(getItem(position)))
                 {
                     row.setBackgroundColor (getResources().getColor(R.color.ingredientsNO));
@@ -105,6 +101,8 @@ public class SelectIngredients extends AppCompatActivity {
                 else
                 {
                     row.setBackgroundColor (getResources().getColor(R.color.ingredientsOK));
+//                    row.setBackgroundColor (Color.parseColor("#A0FFFFFF"));
+//                    row.setBackgroundColor (Color.parseColor("#a099ff99"));
                 }
                 return row;
             }
@@ -113,8 +111,9 @@ public class SelectIngredients extends AppCompatActivity {
 
         mListView.setAdapter(adapter);
         //tot en verde por defecto
-        mListView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark)); // background = lineas de separacion
-        mListView.setTextFilterEnabled(true);
+//        mListView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark)); // background = lineas de separacion
+//        mListView.setBackgroundColor(Color.parseColor("#99ff99"));
+        mListView.setTextFilterEnabled(false);
         mListView.setItemsCanFocus(true);
 
 
@@ -245,34 +244,39 @@ public class SelectIngredients extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         inflater.inflate(R.menu.ingredients_menu, menu);
 
+        final Filter filter = adapter.getFilter();
+
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
-//        searchView.setQueryHint(getText(R.string.searchingredient));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                //se oculta el EditText
-//                searchView.setQuery("", true);
-//                searchView.setIconified(true);
-//                return true;
-//            }
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (TextUtils.isEmpty(newText)) {
+
+        searchView.setQueryHint(getText(R.string.searchingredient));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //se oculta el EditText
+                searchView.setQuery("", false);
+                searchView.setIconified(true);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)) {
+                    filter.filter("");
 //                    mListView.clearTextFilter();
-//                } else {
+                } else {
+                    filter.filter(newText);
 //                    mListView.setFilterText(newText);
-//                }
-//                return true;
-//            }
-//        });
-//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//                searchView.clearFocus();
-//                return true;
-//            }
-//        });
+                }
+                return true;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                searchView.clearFocus();
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -310,18 +314,20 @@ public class SelectIngredients extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.logout) {
+        if (item.getItemId() == R.id.logout) {
             mAuth.signOut();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+        saveIngredients(new HashSet<String>(ingredientsNo));
     }
 }
 

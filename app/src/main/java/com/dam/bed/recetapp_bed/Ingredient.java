@@ -1,9 +1,5 @@
 package com.dam.bed.recetapp_bed;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-
-import java.util.Objects;
 
 public class Ingredient {
 
