@@ -25,7 +25,8 @@
                 android:id="@+id/genderLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/gender" />
+                android:text="@string/gender"
+                android:textColor="@android:color/black" />
 
             <RadioGroup
                 android:id="@+id/radiogroup"
@@ -63,7 +64,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:text="@string/height" />
+                android:text="@string/height"
+                android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/height"
@@ -79,7 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/weight" />
+                android:text="@string/weight"
+                android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/weight"
@@ -95,7 +98,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/yearofbirth" />
+                android:text="@string/yearofbirth"
+                android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/year"
@@ -111,7 +115,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/typeofdiet" />
+                android:text="@string/typeofdiet"
+                android:textColor="@android:color/black" />
 
             <RadioGroup
                 android:id="@+id/radiogroupDiet"
